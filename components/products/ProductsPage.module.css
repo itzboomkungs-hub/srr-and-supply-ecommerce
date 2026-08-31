@@ -1,0 +1,874 @@
+/* =========================================================
+   PRODUCTS PAGE
+   File: ProductsPage.module.css
+
+   ใช้เฉพาะหน้า Products
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.productsPage {
+  width: 100%;
+  max-width: 1600px;
+
+  margin: 0 auto;
+
+  padding: 30px 34px 50px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 22px;
+}
+
+.breadcrumb {
+  margin-bottom: 7px;
+
+  color: #7e90a4;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.breadcrumb span {
+  margin: 0 8px;
+
+  color: #bcc7d3;
+}
+
+.pageHeader h1 {
+  margin: 0;
+
+  color: #19324d;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.pageHeader p {
+  margin: 7px 0 0;
+
+  color: #71849a;
+
+  font-size: 13px;
+}
+
+.headerActions {
+  display: flex;
+
+  gap: 9px;
+}
+
+.primaryButton,
+.secondaryButton {
+  height: 40px;
+
+  padding: 0 16px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.primaryButton {
+  border: 1px solid #1677d2;
+
+  background: #1677d2;
+
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  background: #126ac0;
+}
+
+.secondaryButton {
+  border: 1px solid #dce5ee;
+
+  background: #ffffff;
+
+  color: #52677d;
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summaryGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 15px;
+}
+
+.summaryCard {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #e3eaf2;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 2px 8px rgba(25, 55, 90, 0.035);
+}
+
+.summaryIcon {
+  width: 43px;
+  height: 43px;
+
+  flex: 0 0 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eaf4ff;
+
+  color: #1677d2;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.summaryCard span,
+.summaryCard strong,
+.summaryCard small {
+  display: block;
+}
+
+.summaryCard span {
+  color: #7d8ea2;
+
+  font-size: 11px;
+}
+
+.summaryCard strong {
+  margin-top: 3px;
+
+  color: #19324d;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.summaryCard small {
+  margin-top: 2px;
+
+  color: #99a6b4;
+
+  font-size: 9px;
+}
+
+.warningCard .summaryIcon {
+  background: #fff6df;
+
+  color: #c08200;
+}
+
+.dangerCard .summaryIcon {
+  background: #fff0f1;
+
+  color: #d64e59;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filterCard {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 15px;
+
+  padding: 12px;
+
+  background: #ffffff;
+
+  border: 1px solid #e3eaf2;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 2px 8px rgba(25, 55, 90, 0.03);
+}
+
+.searchBox {
+  height: 38px;
+
+  flex: 1;
+
+  min-width: 220px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 12px;
+
+  border: 1px solid #dce5ee;
+
+  border-radius: 8px;
+
+  background: #fbfcfe;
+}
+
+.searchBox > span {
+  color: #8999aa;
+
+  font-size: 15px;
+}
+
+.searchBox input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #263b52;
+
+  font-size: 11px;
+}
+
+.searchBox input::placeholder {
+  color: #9ba8b7;
+}
+
+.filterSelect {
+  height: 38px;
+
+  min-width: 145px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dce5ee;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #5e7085;
+
+  font-size: 11px;
+
+  outline: 0;
+}
+
+.checkboxFilter {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 7px;
+
+  color: #687b90;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.checkboxFilter input,
+.productsTable input {
+  accent-color: #1677d2;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.tableCard {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e3eaf2;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 2px 8px rgba(25, 55, 90, 0.035);
+}
+
+.tableHeader {
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 15px 19px;
+
+  border-bottom: 1px solid #edf1f5;
+}
+
+.tableHeader h2 {
+  margin: 0;
+
+  color: #19324d;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.tableHeader p {
+  margin: 4px 0 0;
+
+  color: #8b9aaa;
+
+  font-size: 9px;
+}
+
+.tableActions {
+  display: flex;
+
+  gap: 7px;
+}
+
+.tableButton {
+  height: 32px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dce5ee;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #607287;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.tableWrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.productsTable {
+  width: 100%;
+
+  min-width: 1080px;
+
+  border-collapse: collapse;
+
+  table-layout: auto;
+}
+
+.productsTable th {
+  height: 42px;
+
+  padding: 0 10px;
+
+  background: #f8fafc;
+
+  border-bottom: 1px solid #e6ecf2;
+
+  color: #718398;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.productsTable td {
+  height: 64px;
+
+  padding: 8px 10px;
+
+  border-bottom: 1px solid #edf1f5;
+
+  color: #52667c;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.productsTable tbody tr:hover {
+  background: #fbfdff;
+}
+
+.productsTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.checkColumn {
+  width: 42px;
+
+  padding-left: 18px !important;
+
+  text-align: center !important;
+}
+
+
+/* =========================================================
+   PRODUCT CELL
+========================================================= */
+
+.productCell {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 190px;
+}
+
+.productIcon {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #edf5ff;
+
+  color: #1677d2;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.productName strong,
+.productName span {
+  display: block;
+}
+
+.productName strong {
+  color: #294158;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.productName span {
+  margin-top: 3px;
+
+  color: #99a6b4;
+
+  font-size: 9px;
+}
+
+.sku {
+  color: #61758a;
+
+  font-family: monospace;
+
+  font-size: 9px;
+}
+
+.materialTag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 4px 7px;
+
+  border-radius: 5px;
+
+  background: #f2f5f8;
+
+  color: #63758a;
+
+  font-size: 9px;
+}
+
+.price {
+  color: #30475e;
+
+  font-size: 10px;
+}
+
+.stockGood {
+  color: #12845d;
+
+  font-size: 10px;
+}
+
+.stockWarning {
+  color: #c17d00;
+
+  font-size: 10px;
+}
+
+.stockDanger {
+  color: #d64e59;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 5px 8px;
+
+  border-radius: 6px;
+
+  font-size: 9px;
+}
+
+.status i {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  display: block;
+}
+
+.success {
+  background: #eaf8f2;
+
+  color: #16825d;
+}
+
+.success i {
+  background: #1ca574;
+}
+
+.warning {
+  background: #fff5df;
+
+  color: #b87700;
+}
+
+.warning i {
+  background: #dda22b;
+}
+
+.danger {
+  background: #fff0f1;
+
+  color: #d04e58;
+}
+
+.danger i {
+  background: #df5d66;
+}
+
+
+/* =========================================================
+   MORE BUTTON
+========================================================= */
+
+.moreButton {
+  width: 30px;
+  height: 30px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #8494a5;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.emptyState {
+  height: 250px !important;
+
+  text-align: center !important;
+
+  vertical-align: middle;
+
+  white-space: normal !important;
+}
+
+.emptyState div {
+  color: #a0adba;
+
+  font-size: 28px;
+}
+
+.emptyState strong,
+.emptyState span {
+  display: block;
+}
+
+.emptyState strong {
+  margin-top: 8px;
+
+  color: #40566e;
+
+  font-size: 12px;
+}
+
+.emptyState span {
+  margin-top: 5px;
+
+  color: #8c9aaa;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.tableFooter {
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 19px;
+
+  border-top: 1px solid #edf1f5;
+
+  color: #8b99a8;
+
+  font-size: 9px;
+}
+
+.pagination {
+  display: flex;
+
+  gap: 4px;
+}
+
+.pagination button {
+  width: 29px;
+  height: 29px;
+
+  border: 1px solid #dce5ee;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #697b8f;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+
+  cursor: default;
+}
+
+.pagination .activePage {
+  border-color: #1677d2;
+
+  background: #1677d2;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .productsPage {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .summaryGrid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .pageHeader {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .headerActions button {
+    flex: 1;
+  }
+
+  .filterCard {
+    flex-wrap: wrap;
+  }
+
+  .searchBox {
+    flex-basis: 100%;
+  }
+
+  .filterSelect {
+    flex: 1;
+  }
+
+  .checkboxFilter {
+    width: 100%;
+
+    padding: 4px 3px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .productsPage {
+    padding: 20px 14px 35px;
+  }
+
+  .pageHeader h1 {
+    font-size: 25px;
+  }
+
+  .pageHeader p {
+    font-size: 12px;
+
+    line-height: 1.5;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .headerActions button {
+    width: 100%;
+
+    flex: none;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .summaryCard {
+    padding: 15px;
+  }
+
+  .filterCard {
+    padding: 10px;
+  }
+
+  .filterSelect {
+    width: 100%;
+    flex: none;
+  }
+
+  .tableHeader {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .tableActions {
+    width: 100%;
+  }
+
+  .tableButton {
+    flex: 1;
+  }
+
+  .tableFooter {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+}

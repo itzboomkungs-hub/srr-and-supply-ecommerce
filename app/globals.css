@@ -1,0 +1,51 @@
+@import "../styles/variables.css";
+@import "./app-layout.css";
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  min-height: 100%;
+
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    "Tahoma",
+    sans-serif;
+
+  background: #f4f7fb;
+  color: #18324d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

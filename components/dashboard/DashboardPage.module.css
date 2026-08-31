@@ -1,0 +1,827 @@
+/* =========================================================
+   DASHBOARD PAGE
+   File: DashboardPage.module.css
+========================================================= */
+
+.dashboardPage {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  padding: 30px 34px 50px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+.breadcrumb {
+  margin-bottom: 7px;
+
+  color: #7b8da3;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pageHeader h1 {
+  margin: 0;
+
+  color: #17324d;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.pageHeader p {
+  margin: 7px 0 0;
+
+  color: #71849a;
+
+  font-size: 13px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.dateButton,
+.exportButton {
+  height: 40px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.dateButton {
+  padding: 0 14px;
+
+  border: 1px solid #dce5ef;
+
+  background: #ffffff;
+
+  color: #52677e;
+}
+
+.exportButton {
+  padding: 0 17px;
+
+  border: 1px solid #1677d2;
+
+  background: #1677d2;
+
+  color: #ffffff;
+}
+
+.exportButton:hover {
+  background: #126ac0;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.summaryGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 16px;
+}
+
+.summaryCard {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4ebf3;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 2px 8px rgba(25, 55, 90, 0.035);
+}
+
+.summaryIcon {
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #e9f3ff;
+
+  color: #1677d2;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.summaryContent {
+  min-width: 0;
+}
+
+.summaryContent span,
+.summaryContent strong,
+.summaryContent small {
+  display: block;
+}
+
+.summaryContent span {
+  color: #8191a4;
+
+  font-size: 11px;
+}
+
+.summaryContent strong {
+  margin-top: 3px;
+
+  color: #19324d;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.summaryContent small {
+  margin-top: 3px;
+
+  font-size: 10px;
+}
+
+.positive {
+  color: #16936c;
+}
+
+.negative {
+  color: #e0525d;
+}
+
+.warning {
+  color: #c18100;
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.mainGrid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(320px, 0.9fr);
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+}
+
+.lowerGrid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.7fr)
+    minmax(260px, 0.9fr)
+    minmax(240px, 0.8fr);
+
+  gap: 16px;
+}
+
+.panel {
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #e4ebf3;
+
+  border-radius: 11px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 2px 8px rgba(25, 55, 90, 0.035);
+}
+
+.panelHeader {
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 16px 19px;
+
+  border-bottom: 1px solid #edf1f5;
+}
+
+.panelHeader h2 {
+  margin: 0;
+
+  color: #19324d;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.panelHeader span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8b9bad;
+
+  font-size: 10px;
+}
+
+.viewAll {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #1677d2;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chartSelect {
+  height: 34px;
+
+  padding: 0 10px;
+
+  border: 1px solid #dce5ef;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #5d7085;
+
+  font-size: 11px;
+}
+
+.chartArea {
+  position: relative;
+
+  height: 310px;
+
+  padding: 20px 22px 17px 62px;
+}
+
+.chartGrid {
+  position: absolute;
+
+  top: 20px;
+  left: 62px;
+  right: 22px;
+  bottom: 43px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chartGrid span {
+  position: relative;
+
+  color: #a0adbb;
+
+  font-size: 9px;
+}
+
+.chartGrid span::after {
+  content: "";
+
+  position: absolute;
+
+  left: 34px;
+  right: 0;
+
+  top: 50%;
+
+  border-top: 1px dashed #e5ebf1;
+
+  z-index: 0;
+}
+
+.chartBars {
+  position: relative;
+
+  height: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+
+  gap: 20px;
+
+  padding-top: 5px;
+  padding-bottom: 25px;
+}
+
+.barColumn {
+  height: 100%;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+}
+
+.bar {
+  width: 24px;
+
+  min-height: 10px;
+
+  background: #1677d2;
+
+  border-radius: 5px 5px 2px 2px;
+
+  position: relative;
+  z-index: 2;
+}
+
+.barColumn span {
+  color: #8d9bab;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alertList {
+  padding: 13px 16px 16px;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 12px;
+
+  margin-bottom: 9px;
+
+  border-radius: 9px;
+}
+
+.alert:last-child {
+  margin-bottom: 0;
+}
+
+.alertIcon {
+  width: 32px;
+  height: 32px;
+
+  flex: 0 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.alert strong,
+.alert span {
+  display: block;
+}
+
+.alert strong {
+  color: #34485d;
+
+  font-size: 11px;
+}
+
+.alert span {
+  margin-top: 3px;
+
+  color: #8090a2;
+
+  font-size: 9px;
+}
+
+.alertDanger {
+  background: #fff0f1;
+}
+
+.alertWarning {
+  background: #fff7e5;
+}
+
+.alertInfo {
+  background: #eaf4ff;
+}
+
+.alertSuccess {
+  background: #eaf8f3;
+}
+
+
+/* =========================================================
+   BEST SELLERS
+========================================================= */
+
+.productList {
+  padding: 4px 19px 10px;
+}
+
+.productRow {
+  min-height: 62px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border-bottom: 1px solid #eef2f6;
+}
+
+.productRow:last-child {
+  border-bottom: 0;
+}
+
+.rank {
+  width: 20px;
+
+  color: #8b9aab;
+
+  text-align: center;
+
+  font-size: 10px;
+}
+
+.productIcon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #edf5ff;
+
+  color: #1677d2;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.productInfo {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.productInfo strong,
+.productInfo span {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.productInfo strong {
+  color: #294158;
+
+  font-size: 11px;
+}
+
+.productInfo span {
+  margin-top: 3px;
+
+  color: #9aa7b5;
+
+  font-size: 9px;
+}
+
+.productQuantity {
+  text-align: right;
+}
+
+.productQuantity strong,
+.productQuantity span {
+  display: block;
+}
+
+.productQuantity strong {
+  color: #1f354d;
+
+  font-size: 11px;
+}
+
+.productQuantity span {
+  margin-top: 2px;
+
+  color: #98a5b3;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+.inventoryList {
+  padding: 11px 15px 15px;
+}
+
+.inventoryBox {
+  padding: 15px;
+
+  margin-bottom: 9px;
+
+  border-radius: 9px;
+
+  background: #edf5ff;
+}
+
+.inventoryBox:last-child {
+  margin-bottom: 0;
+}
+
+.inventoryBox span,
+.inventoryBox small {
+  display: block;
+}
+
+.inventoryBox span {
+  color: #7b8da1;
+
+  font-size: 9px;
+}
+
+.inventoryBox strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #19324d;
+
+  font-size: 18px;
+}
+
+.inventoryBox small {
+  margin-top: 3px;
+
+  color: #8b9bab;
+
+  font-size: 9px;
+}
+
+.inventoryWarning {
+  background: #fff7e5;
+}
+
+.inventoryDanger {
+  background: #fff0f1;
+}
+
+
+/* =========================================================
+   CUSTOMERS
+========================================================= */
+
+.customerList {
+  padding: 4px 19px 10px;
+}
+
+.customerStat {
+  padding: 15px 0;
+
+  border-bottom: 1px solid #edf1f5;
+}
+
+.customerStat:last-child {
+  border-bottom: 0;
+}
+
+.customerStat span,
+.customerStat small {
+  display: block;
+}
+
+.customerStat span {
+  color: #8998a9;
+
+  font-size: 9px;
+}
+
+.customerStat strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #19324d;
+
+  font-size: 21px;
+}
+
+.customerStat small {
+  margin-top: 2px;
+
+  color: #9aa7b5;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .dashboardPage {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .summaryGrid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .lowerGrid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .pageHeader {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .dateButton,
+  .exportButton {
+    flex: 1;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .lowerGrid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .dashboardPage {
+    padding: 20px 14px 35px;
+  }
+
+  .pageHeader {
+    margin-bottom: 18px;
+  }
+
+  .pageHeader h1 {
+    font-size: 25px;
+  }
+
+  .pageHeader p {
+    font-size: 12px;
+
+    line-height: 1.5;
+  }
+
+  .headerActions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .dateButton,
+  .exportButton {
+    width: 100%;
+
+    flex: none;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .summaryCard {
+    padding: 15px;
+  }
+
+  .mainGrid,
+  .lowerGrid {
+    gap: 12px;
+  }
+
+  .chartArea {
+    height: 250px;
+
+    padding-left: 45px;
+  }
+
+  .chartGrid {
+    left: 45px;
+    right: 12px;
+  }
+
+  .chartGrid span::after {
+    left: 28px;
+  }
+
+  .bar {
+    width: 18px;
+  }
+
+  .panelHeader {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}

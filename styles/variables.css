@@ -1,0 +1,72 @@
+:root {
+  /* =========================
+     BRAND
+  ========================= */
+
+  --brand-primary: #1677d2;
+  --brand-primary-dark: #0f63b5;
+  --brand-primary-light: #eaf4ff;
+
+  /* =========================
+     BACKGROUND
+  ========================= */
+
+  --bg-page: #f4f7fb;
+  --bg-card: #ffffff;
+  --bg-soft: #f8fafc;
+
+  /* =========================
+     TEXT
+  ========================= */
+
+  --text-primary: #172b4d;
+  --text-secondary: #526581;
+  --text-muted: #71829a;
+  --text-light: #94a3b8;
+
+  /* =========================
+     BORDER
+  ========================= */
+
+  --border: #e2e8f0;
+  --border-light: #edf1f5;
+
+  /* =========================
+     STATUS
+  ========================= */
+
+  --success: #159570;
+  --success-bg: #eaf8f2;
+
+  --warning: #c88916;
+  --warning-bg: #fff6df;
+
+  --danger: #df5360;
+  --danger-bg: #fff0f2;
+
+  /* =========================
+     RADIUS
+  ========================= */
+
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+
+  /* =========================
+     SHADOW
+  ========================= */
+
+  --shadow-card: 0 2px 10px rgba(20, 45, 80, 0.045);
+
+  /* =========================
+     TYPOGRAPHY
+  ========================= */
+
+  --font-xs: 10px;
+  --font-sm: 11px;
+  --font-md: 12px;
+  --font-lg: 14px;
+  --font-xl: 16px;
+  --font-2xl: 22px;
+  --font-3xl: 28px;
+}

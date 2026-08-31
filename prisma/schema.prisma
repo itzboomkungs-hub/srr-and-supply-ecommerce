@@ -1,0 +1,378 @@
+เดกgenerator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =========================
+// CUSTOMER
+// =========================
+
+model Customer {
+  id                String   @id @default(cuid())
+  customerCode      String   @unique
+  companyName       String
+  taxId             String?
+  branchName        String?
+  phone             String?
+  email             String?
+  status            CustomerStatus @default(ACTIVE)
+
+  flowAccountContactId String?
+
+  contacts          CustomerContact[]
+  addresses         CustomerAddress[]
+  purchaseOrders    PurchaseOrder[]
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model CustomerContact {
+  id          String   @id @default(cuid())
+  customerId  String
+
+  name        String
+  position    String?
+  phone       String?
+  email       String?
+  isDefault   Boolean  @default(false)
+
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+model CustomerAddress {
+  id              String   @id @default(cuid())
+  customerId      String
+
+  name            String
+  addressLine     String
+  subdistrict     String?
+  district        String?
+  province        String?
+  postalCode      String?
+  phone           String?
+
+  addressType     AddressType @default(SHIPPING)
+  isDefault       Boolean @default(false)
+
+  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+// =========================
+// PRODUCT
+// =========================
+
+model Product {
+  id                    String   @id @default(cuid())
+  sku                   String   @unique
+  barcode               String?  @unique
+  name                  String
+  description           String?
+  category              String?
+  material              String?
+  hardness              String?
+  unit                  String   @default("PCS")
+
+  basePrice             Decimal  @db.Decimal(12, 2)
+
+  flowAccountProductId  String?
+
+  active                Boolean  @default(true)
+
+  inventory             Inventory?
+  purchaseOrderItems    PurchaseOrderItem[]
+  purchaseRequestItems  PurchaseRequestItem[]
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([category])
+  @@index([active])
+}
+
+model Inventory {
+  id                String   @id @default(cuid())
+  productId         String   @unique
+
+  flowAccountStock  Int      @default(0)
+  webStock          Int      @default(0)
+  reservedStock     Int      @default(0)
+  availableStock    Int      @default(0)
+
+  lastSyncedAt      DateTime?
+  syncStatus        SyncStatus @default(PENDING)
+
+  product           Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// =========================
+// PURCHASE ORDER
+// =========================
+
+model PurchaseOrder {
+  id                    String   @id @default(cuid())
+
+  poNumber              String   @unique
+  customerPoNumber      String?
+
+  customerId            String
+
+  orderDate             DateTime @default(now())
+  requestedDeliveryDate DateTime?
+
+  status                PurchaseOrderStatus @default(SUBMITTED)
+
+  // Customer snapshot
+  customerCompanyName   String
+  customerTaxId         String?
+
+  contactName           String?
+  contactPhone          String?
+  contactEmail          String?
+
+  // Shipping snapshot
+  shippingName          String?
+  shippingPhone         String?
+  shippingAddress       String?
+  shippingSubdistrict   String?
+  shippingDistrict      String?
+  shippingProvince      String?
+  shippingPostalCode    String?
+
+  // Billing snapshot
+  billingName           String?
+  billingTaxId          String?
+  billingAddress        String?
+  billingSubdistrict    String?
+  billingDistrict       String?
+  billingProvince       String?
+  billingPostalCode     String?
+
+  subtotal              Decimal  @db.Decimal(12, 2) @default(0)
+  discount              Decimal  @db.Decimal(12, 2) @default(0)
+  shippingFee           Decimal  @db.Decimal(12, 2) @default(0)
+  vat                   Decimal  @db.Decimal(12, 2) @default(0)
+  grandTotal             Decimal  @db.Decimal(12, 2) @default(0)
+
+  customerNote          String?
+  internalNote          String?
+
+  requestTaxInvoice     Boolean @default(false)
+  requestCashBill       Boolean @default(false)
+  requestReceipt        Boolean @default(false)
+  requestDeliveryNote   Boolean @default(false)
+  requestOtherDocument  Boolean @default(false)
+  documentNote          String?
+
+  attachmentUrl         String?
+
+  customer              Customer @relation(fields: [customerId], references: [id])
+  items                 PurchaseOrderItem[]
+  purchaseRequest       PurchaseRequest?
+  shipments             Shipment[]
+  statusHistory         PurchaseOrderStatusHistory[]
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([status])
+  @@index([orderDate])
+}
+
+model PurchaseOrderItem {
+  id             String   @id @default(cuid())
+
+  purchaseOrderId String
+  productId       String
+
+  sku             String
+  productName     String
+
+  quantity        Int
+  unitPrice       Decimal @db.Decimal(12, 2)
+  discount        Decimal @db.Decimal(12, 2) @default(0)
+  total           Decimal @db.Decimal(12, 2)
+
+  purchaseOrder  PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  product        Product @relation(fields: [productId], references: [id])
+
+  createdAt      DateTime @default(now())
+
+  @@index([purchaseOrderId])
+  @@index([productId])
+}
+
+// =========================
+// PURCHASE REQUEST
+// =========================
+
+model PurchaseRequest {
+  id              String @id @default(cuid())
+
+  prNumber        String @unique
+  purchaseOrderId String @unique
+
+  status          PurchaseRequestStatus @default(DRAFT)
+  priority        Priority @default(NORMAL)
+
+  requestedDate   DateTime @default(now())
+  requiredDate    DateTime?
+
+  requestedBy     String?
+  approvedBy      String?
+
+  note            String?
+
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  items           PurchaseRequestItem[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model PurchaseRequestItem {
+  id                  String @id @default(cuid())
+
+  purchaseRequestId   String
+  productId           String
+
+  quantityRequested   Int
+  quantityAvailable   Int @default(0)
+  quantityReserved    Int @default(0)
+  quantityPicked      Int @default(0)
+  quantityPacked      Int @default(0)
+  quantityShipped     Int @default(0)
+
+  purchaseRequest     PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  product             Product @relation(fields: [productId], references: [id])
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([purchaseRequestId])
+  @@index([productId])
+}
+
+// =========================
+// SHIPMENT
+// =========================
+
+model Shipment {
+  id              String @id @default(cuid())
+
+  purchaseOrderId String
+  shipmentNumber  String @unique
+
+  status          ShipmentStatus @default(PENDING)
+
+  carrier         String?
+  trackingNumber  String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([purchaseOrderId])
+  @@index([trackingNumber])
+}
+
+// =========================
+// PO STATUS HISTORY
+// =========================
+
+model PurchaseOrderStatusHistory {
+  id              String @id @default(cuid())
+
+  purchaseOrderId String
+  status          PurchaseOrderStatus
+
+  note            String?
+  changedBy       String?
+
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([purchaseOrderId])
+}
+
+// =========================
+// ENUMS
+// =========================
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+  BOTH
+}
+
+enum SyncStatus {
+  PENDING
+  SYNCED
+  FAILED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum PurchaseOrderStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PR_CREATED
+  PARTIALLY_FULFILLED
+  FULFILLED
+  CANCELLED
+}
+
+enum PurchaseRequestStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  PICKING
+  PACKED
+  READY_TO_SHIP
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum ShipmentStatus {
+  PENDING
+  PACKED
+  READY_TO_SHIP
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
