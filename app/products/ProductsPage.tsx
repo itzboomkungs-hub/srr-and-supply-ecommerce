@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import styles from "./ProductsPage.module.css";
 
@@ -17,7 +16,6 @@ type Product = {
 
 /* =====================================================
    PRODUCT CATEGORIES
-   ใช้ชุดเดียวกับ HomePage.tsx
 ===================================================== */
 
 const categories = [
@@ -70,58 +68,22 @@ const categories = [
 
 /* =====================================================
    SIDEBAR CATEGORIES
-   เหมือน HomePage.tsx
+   ใช้รูปแบบเดียวกับ HomePage
 ===================================================== */
 
 const sideCategories = [
-  {
-    label: "O-Ring",
-    category: "O-Ring",
-  },
-  {
-    label: "Oil Seal",
-    category: "Oil Seal",
-  },
-  {
-    label: "Hydraulic Seal",
-    category: "Hydraulic Seal",
-  },
-  {
-    label: "Pneumatic Seal",
-    category: "Pneumatic Seal",
-  },
-  {
-    label: "Rotary Seal",
-    category: "Rotary Seal",
-  },
-  {
-    label: "ประเก็น (Gasket)",
-    category: "Gasket",
-  },
-  {
-    label: "อะไหล่ปั๊มทุกชนิด",
-    category: "Pump Parts",
-  },
-  {
-    label: "วาล์ว (Valve)",
-    category: "Valve",
-  },
-  {
-    label: "อะไหล่อุตสาหกรรม",
-    category: "Industrial Parts",
-  },
-  {
-    label: "ชุดซ่อม (Repair Kit)",
-    category: "",
-  },
-  {
-    label: "น้ำมันและจาระบี",
-    category: "",
-  },
-  {
-    label: "อุปกรณ์อื่นๆ",
-    category: "",
-  },
+  "O-Ring",
+  "Oil Seal",
+  "Hydraulic Seal",
+  "Pneumatic Seal",
+  "Rotary Seal",
+  "ประเก็น (Gasket)",
+  "อะไหล่ปั๊มทุกชนิด",
+  "วาล์ว (Valve)",
+  "อะไหล่อุตสาหกรรม",
+  "ชุดซ่อม (Repair Kit)",
+  "น้ำมันและจาระบี",
+  "อุปกรณ์อื่นๆ",
 ];
 
 /* =====================================================
@@ -211,10 +173,6 @@ const products: Product[] = [
   },
 ];
 
-/* =====================================================
-   STOCK STATUS
-===================================================== */
-
 function getStockStatus(stock: number) {
   if (stock === 0) {
     return {
@@ -236,19 +194,11 @@ function getStockStatus(stock: number) {
   };
 }
 
-/* =====================================================
-   PAGE
-===================================================== */
-
 export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ทั้งหมด");
   const [status, setStatus] = useState("ทั้งหมด");
   const [showInactive, setShowInactive] = useState(false);
-
-  /* =====================================================
-     FILTER PRODUCTS
-  ===================================================== */
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -270,17 +220,9 @@ export default function ProductsPage() {
         status === "ทั้งหมด" ||
         productStatus.label === status;
 
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesStatus
-      );
+      return matchesSearch && matchesCategory && matchesStatus;
     });
   }, [search, category, status]);
-
-  /* =====================================================
-     SUMMARY
-  ===================================================== */
 
   const totalProducts = products.length;
 
@@ -289,9 +231,7 @@ export default function ProductsPage() {
   ).length;
 
   const lowStockProducts = products.filter(
-    (product) =>
-      product.stock > 0 &&
-      product.stock <= 50
+    (product) => product.stock > 0 && product.stock <= 50
   ).length;
 
   const outOfStockProducts = products.filter(
@@ -299,320 +239,112 @@ export default function ProductsPage() {
   ).length;
 
   /* =====================================================
-     RENDER
+     SIDEBAR CATEGORY MAPPING
   ===================================================== */
+
+  const getSidebarCategory = (item: string) => {
+    if (item === "ประเก็น (Gasket)") {
+      return "Gasket";
+    }
+
+    if (item === "อะไหล่ปั๊มทุกชนิด") {
+      return "Pump Parts";
+    }
+
+    if (item === "วาล์ว (Valve)") {
+      return "Valve";
+    }
+
+    if (item === "อะไหล่อุตสาหกรรม") {
+      return "Industrial Parts";
+    }
+
+    return item;
+  };
 
   return (
     <div className={styles.productsPage}>
 
-      {/* =====================================================
-          TOP CONTACT BAR
-      ===================================================== */}
+    <div className={styles.productsLayout}>
 
-      <div className={styles.topbar}>
-        <div className={styles.container}>
+      {/* =========================
+          LEFT SIDEBAR
+      ========================= */}
 
-          <div className={styles.companyMessage}>
-            จำหน่าย ซีล โอริง ประเก็น อะไหล่ ปั๊ม วาล์ว ทุกชนิด
-          </div>
+      <aside className={styles.categorySidebar}>
 
-          <div className={styles.contactList}>
-
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"
-                />
-              </svg>
-              02-XXX-XXXX
-            </span>
-
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 0c4.411 0 8 2.912 8 6.492 0 1.433-.555 2.723-1.715 3.994-1.678 1.932-5.431 4.285-6.285 4.645-.83.35-.734-.197-.696-.413l.003-.018.114-.685c.027-.204.055-.521-.026-.723-.09-.223-.444-.339-.704-.395C2.846 12.39 0 9.701 0 6.492 0 2.912 3.59 0 8 0" />
-              </svg>
-              @srrandsupply
-            </span>
-
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M2 2A2 2 0 0 0 .05 3.555L8 8.414l7.95-4.859A2 2 0 0 0 14 2zm-2 9.8V4.698l5.803 3.546zm6.761-2.97-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 9.671V4.697l-5.803 3.546.338.208A4.5 4.5 0 0 1 12.5 8c1.414 0 2.675.652 3.5 1.671" />
-              </svg>
-              info@srrandsupply.com
-            </span>
-
-            <span>
-              จันทร์ - เสาร์ 8.00 - 17.00 น.
-            </span>
-
-          </div>
-
+        <div className={styles.sidebarTitle}>
+          <span>☰</span>
+          หมวดหมู่สินค้า
         </div>
-      </div>
 
+        <div className={styles.sidebarList}>
 
-      {/* =====================================================
-          MAIN HEADER
-      ===================================================== */}
+          {sideCategories.map((item) => {
 
-      <header className={styles.header}>
+            const categoryName =
+              item.includes("(")
+                ? item.split(" (")[0]
+                : item === "อะไหล่ปั๊มทุกชนิด"
+                  ? "Pump Parts"
+                  : item === "อะไหล่อุตสาหกรรม"
+                    ? "Industrial Parts"
+                    : item === "น้ำมันและจาระบี"
+                      ? item
+                      : item === "อุปกรณ์อื่นๆ"
+                        ? item
+                        : item;
 
-        <div className={styles.container}>
-
-          <div className={styles.headerInner}>
-
-            <Link href="/" className={styles.logo}>
-
-              <div className={styles.logoMark}>
-                <img
-                  src="/logo.jpg"
-                  alt="SRR AND SUPPLY"
-                />
-              </div>
-
-              <div className={styles.logoText}>
-                <strong>SRR AND SUPPLY</strong>
-                <span>HIGH QUALITY SEAL PRODUCTS</span>
-              </div>
-
-            </Link>
-
-
-            <div className={styles.headerSearch}>
-
-              <input
-                type="text"
-                placeholder="ค้นหาสินค้า, ขนาด, รุ่น, วัสดุ, รหัสสินค้า..."
-                aria-label="ค้นหาสินค้า"
-              />
-
+            return (
               <button
                 type="button"
-                aria-label="ค้นหา"
+                key={item}
+                className={`${styles.sidebarItem} ${
+                  category === categoryName
+                    ? styles.sidebarItemActive
+                    : ""
+                }`}
+                onClick={() => {
+                  const matchedCategory = categories.find(
+                    (cat) =>
+                      cat.name === categoryName ||
+                      cat.thai === categoryName
+                  );
+
+                  if (matchedCategory) {
+                    setCategory(matchedCategory.name);
+                  }
+                }}
               >
-                ⌕
-              </button>
 
-            </div>
-
-
-            <div className={styles.headerActions}>
-
-              <button
-                type="button"
-                className={styles.account}
-              >
-                <span className={styles.actionIcon}>
-                  ♙
+                <span className={styles.sidebarIcon}>
+                  ○
                 </span>
 
                 <span>
-                  <strong>เข้าสู่ระบบ</strong>
-                  <small>สมาชิก</small>
+                  {item}
                 </span>
+
+                <span className={styles.sidebarArrow}>
+                  ›
+                </span>
+
               </button>
+            );
 
-
-              <button
-                type="button"
-                className={styles.account}
-              >
-                <span className={styles.actionIcon}>
-                  ♙
-                </span>
-
-                <span>
-                  <strong>สมัครสมาชิก</strong>
-                  <small>สร้างบัญชี</small>
-                </span>
-              </button>
-
-
-              <button
-                type="button"
-                className={styles.cart}
-              >
-                <span className={styles.cartIcon}>
-                  🛒
-                </span>
-
-                <span>
-                  <strong>(0)</strong>
-                  <small>ตะกร้าสินค้า</small>
-                </span>
-              </button>
-
-            </div>
-
-          </div>
+          })}
 
         </div>
 
-      </header>
+        <button
+          type="button"
+          className={styles.sidebarButton}
+          onClick={() => setCategory("ทั้งหมด")}
+        >
+          ดูสินค้าทั้งหมด
+        </button>
 
-
-      {/* =====================================================
-          NAVIGATION
-      ===================================================== */}
-
-      <nav className={styles.navigation}>
-
-        <div className={styles.container}>
-
-          <div className={styles.navigationInner}>
-
-            <Link
-              href="/"
-              className={styles.navCategory}
-            >
-              ☰
-              <span>หมวดหมู่สินค้า</span>
-            </Link>
-
-            <Link href="/products">
-              O-Ring
-            </Link>
-
-            <Link href="/products">
-              Oil Seal
-            </Link>
-
-            <Link href="/products">
-              Hydraulic Seal
-            </Link>
-
-            <Link href="/products">
-              Pneumatic Seal
-            </Link>
-
-            <Link href="/products">
-              Rotary Seal
-            </Link>
-
-            <Link href="/products">
-              ประเก็น
-            </Link>
-
-            <Link href="/products">
-              อะไหล่ปั๊ม
-            </Link>
-
-            <Link href="/products">
-              วาล์ว
-            </Link>
-
-            <Link
-              href="/products"
-              className={styles.navAll}
-            >
-              ทั้งหมด⌄
-            </Link>
-
-            <Link
-              href="/contact"
-              className={styles.navContact}
-            >
-              ติดต่อเรา
-            </Link>
-
-          </div>
-
-        </div>
-
-      </nav>
-
-
-      {/* =====================================================
-          PRODUCTS PAGE
-          ของเดิมทั้งหมด
-      ===================================================== */}
-
-      <div className={styles.productsLayout}>
-
-        {/* =====================================================
-            LEFT SIDEBAR
-        ===================================================== */}
-
-        <aside className={styles.categorySidebar}>
-
-          <div className={styles.sidebarTitle}>
-            <span>☰</span>
-            หมวดหมู่สินค้า
-          </div>
-
-          <div className={styles.sidebarList}>
-
-            {sideCategories.map((item) => {
-
-              const isActive =
-                item.category !== "" &&
-                category === item.category;
-
-              return (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={`${styles.sidebarItem} ${
-                    isActive
-                      ? styles.sidebarItemActive
-                      : ""
-                  }`}
-                  onClick={() => {
-
-                    if (item.category !== "") {
-                      setCategory(item.category);
-                    }
-
-                  }}
-                >
-
-                  <span className={styles.sidebarIcon}>
-                    ○
-                  </span>
-
-                  <span className={styles.sidebarLabel}>
-                    {item.label}
-                  </span>
-
-                  <span className={styles.sidebarArrow}>
-                    ›
-                  </span>
-
-                </button>
-              );
-
-            })}
-
-          </div>
-
-          <button
-            type="button"
-            className={styles.sidebarButton}
-            onClick={() => setCategory("ทั้งหมด")}
-          >
-            ดูสินค้าทั้งหมด
-          </button>
-
-        </aside>
+      </aside>
 
 
         {/* =====================================================
@@ -635,7 +367,9 @@ export default function ProductsPage() {
                 สินค้า
               </div>
 
-              <h1>สินค้า</h1>
+              <h1>
+                สินค้า
+              </h1>
 
               <p>
                 จัดการรายการสินค้า ราคา SKU และสถานะสต็อกของ SRR AND SUPPLY
@@ -643,9 +377,20 @@ export default function ProductsPage() {
 
             </div>
 
+
             <div className={styles.headerActions}>
 
-              
+              <button
+                className={styles.secondaryButton}
+              >
+                ↓ &nbsp; นำเข้าสินค้า
+              </button>
+
+              <button
+                className={styles.primaryButton}
+              >
+                ＋ &nbsp; เพิ่มสินค้า
+              </button>
 
             </div>
 
@@ -665,9 +410,17 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <span>สินค้าทั้งหมด</span>
-                <strong>{totalProducts}</strong>
-                <small>รายการสินค้า</small>
+                <span>
+                  สินค้าทั้งหมด
+                </span>
+
+                <strong>
+                  {totalProducts}
+                </strong>
+
+                <small>
+                  รายการสินค้า
+                </small>
               </div>
 
             </div>
@@ -680,9 +433,17 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <span>สินค้าเปิดขาย</span>
-                <strong>{sellingProducts}</strong>
-                <small>รายการ</small>
+                <span>
+                  สินค้าเปิดขาย
+                </span>
+
+                <strong>
+                  {sellingProducts}
+                </strong>
+
+                <small>
+                  รายการ
+                </small>
               </div>
 
             </div>
@@ -697,9 +458,17 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <span>สินค้าใกล้หมด</span>
-                <strong>{lowStockProducts}</strong>
-                <small>ต้องตรวจสอบ</small>
+                <span>
+                  สินค้าใกล้หมด
+                </span>
+
+                <strong>
+                  {lowStockProducts}
+                </strong>
+
+                <small>
+                  ต้องตรวจสอบ
+                </small>
               </div>
 
             </div>
@@ -714,9 +483,17 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <span>สินค้าหมด</span>
-                <strong>{outOfStockProducts}</strong>
-                <small>ต้องเติมสต็อก</small>
+                <span>
+                  สินค้าหมด
+                </span>
+
+                <strong>
+                  {outOfStockProducts}
+                </strong>
+
+                <small>
+                  ต้องเติมสต็อก
+                </small>
               </div>
 
             </div>
@@ -733,14 +510,20 @@ export default function ProductsPage() {
             <div className={styles.categoryHeading}>
 
               <div>
-                <h2>หมวดหมู่สินค้า</h2>
+
+                <h2>
+                  หมวดหมู่สินค้า
+                </h2>
 
                 <p>
                   เลือกดูสินค้าตามประเภทที่ต้องการ
                 </p>
+
               </div>
 
+
               {category !== "ทั้งหมด" && (
+
                 <button
                   type="button"
                   className={styles.clearCategory}
@@ -750,6 +533,7 @@ export default function ProductsPage() {
                 >
                   แสดงสินค้าทั้งหมด →
                 </button>
+
               )}
 
             </div>
@@ -786,7 +570,7 @@ export default function ProductsPage() {
               </button>
 
 
-              {/* CATEGORIES */}
+              {/* CATEGORY */}
 
               {categories.map((item) => (
 
@@ -832,7 +616,9 @@ export default function ProductsPage() {
 
             <div className={styles.searchBox}>
 
-              <span>⌕</span>
+              <span>
+                ⌕
+              </span>
 
               <input
                 type="text"
@@ -947,14 +733,12 @@ export default function ProductsPage() {
               <div className={styles.tableActions}>
 
                 <button
-                  type="button"
                   className={styles.tableButton}
                 >
                   ☷ &nbsp; ตัวกรอง
                 </button>
 
                 <button
-                  type="button"
                   className={styles.tableButton}
                 >
                   ↓ &nbsp; ส่งออก
@@ -967,25 +751,56 @@ export default function ProductsPage() {
 
             <div className={styles.tableWrapper}>
 
-              <table className={styles.productsTable}>
+              <table
+                className={styles.productsTable}
+              >
 
                 <thead>
 
                   <tr>
 
-                    <th className={styles.checkColumn}>
+                    <th
+                      className={styles.checkColumn}
+                    >
                       <input type="checkbox" />
                     </th>
 
-                    <th>สินค้า</th>
-                    <th>SKU</th>
-                    <th>หมวดหมู่</th>
-                    <th>วัสดุ</th>
-                    <th>ราคาขาย</th>
-                    <th>สต็อก</th>
-                    <th>จองแล้ว</th>
-                    <th>คงเหลือ</th>
-                    <th>สถานะ</th>
+                    <th>
+                      สินค้า
+                    </th>
+
+                    <th>
+                      SKU
+                    </th>
+
+                    <th>
+                      หมวดหมู่
+                    </th>
+
+                    <th>
+                      วัสดุ
+                    </th>
+
+                    <th>
+                      ราคาขาย
+                    </th>
+
+                    <th>
+                      สต็อก
+                    </th>
+
+                    <th>
+                      จองแล้ว
+                    </th>
+
+                    <th>
+                      คงเหลือ
+                    </th>
+
+                    <th>
+                      สถานะ
+                    </th>
+
                     <th></th>
 
                   </tr>
@@ -1009,7 +824,9 @@ export default function ProductsPage() {
 
                       return (
 
-                        <tr key={product.id}>
+                        <tr
+                          key={product.id}
+                        >
 
                           <td
                             className={
@@ -1019,8 +836,6 @@ export default function ProductsPage() {
                             <input type="checkbox" />
                           </td>
 
-
-                          {/* PRODUCT */}
 
                           <td>
 
@@ -1059,8 +874,6 @@ export default function ProductsPage() {
                           </td>
 
 
-                          {/* SKU */}
-
                           <td>
 
                             <span
@@ -1074,14 +887,10 @@ export default function ProductsPage() {
                           </td>
 
 
-                          {/* CATEGORY */}
-
                           <td>
                             {product.category}
                           </td>
 
-
-                          {/* MATERIAL */}
 
                           <td>
 
@@ -1096,8 +905,6 @@ export default function ProductsPage() {
                           </td>
 
 
-                          {/* PRICE */}
-
                           <td>
 
                             <strong
@@ -1110,8 +917,6 @@ export default function ProductsPage() {
 
                           </td>
 
-
-                          {/* STOCK */}
 
                           <td>
 
@@ -1130,28 +935,22 @@ export default function ProductsPage() {
                           </td>
 
 
-                          {/* RESERVED */}
-
                           <td>
                             {product.reserved.toLocaleString()}
                           </td>
 
-
-                          {/* REMAINING */}
 
                           <td>
                             {remaining.toLocaleString()}
                           </td>
 
 
-                          {/* STATUS */}
-
                           <td>
 
                             <span
                               className={`${styles.status} ${
                                 styles[
-                                  stockStatus.type as keyof typeof styles
+                                  stockStatus.type
                                 ]
                               }`}
                             >
@@ -1165,12 +964,9 @@ export default function ProductsPage() {
                           </td>
 
 
-                          {/* ACTION */}
-
                           <td>
 
                             <button
-                              type="button"
                               className={
                                 styles.moreButton
                               }
@@ -1189,8 +985,6 @@ export default function ProductsPage() {
                   )}
 
 
-                  {/* EMPTY */}
-
                   {filteredProducts.length === 0 && (
 
                     <tr>
@@ -1202,7 +996,9 @@ export default function ProductsPage() {
                         }
                       >
 
-                        <div>⌕</div>
+                        <div>
+                          ⌕
+                        </div>
 
                         <strong>
                           ไม่พบสินค้าที่ค้นหา
@@ -1239,27 +1035,21 @@ export default function ProductsPage() {
 
               <div className={styles.pagination}>
 
-                <button
-                  type="button"
-                  disabled
-                >
+                <button disabled>
                   ‹
                 </button>
 
                 <button
-                  type="button"
-                  className={
-                    styles.activePage
-                  }
+                  className={styles.activePage}
                 >
                   1
                 </button>
 
-                <button type="button">
+                <button>
                   2
                 </button>
 
-                <button type="button">
+                <button>
                   ›
                 </button>
 
