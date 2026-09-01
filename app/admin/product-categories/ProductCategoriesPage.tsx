@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import "./admin/ProductCategoriesPage.css";
+import "./ProductCategoriesPage.css";
 
 type Category = {
   id: number;
