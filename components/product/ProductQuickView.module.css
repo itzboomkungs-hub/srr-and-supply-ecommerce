@@ -1,0 +1,617 @@
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.68
+    );
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+  position: relative;
+
+  width: min(
+    820px,
+    calc(100vw - 48px)
+  );
+
+  min-height: 430px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(300px, 46%)
+    minmax(0, 54%);
+
+  overflow: hidden;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 25px 80px
+    rgba(
+      0,
+      0,
+      0,
+      0.32
+    );
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+.closeButton {
+  position: absolute;
+
+  top: 10px;
+  right: 12px;
+
+  z-index: 10;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #59697a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #e02626;
+}
+
+
+/* =========================================================
+   IMAGE AREA
+========================================================= */
+
+.imageArea {
+  min-height: 430px;
+
+  padding: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-right:
+    1px solid #e7ebef;
+
+  background: #ffffff;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+
+  max-width: 330px;
+  max-height: 330px;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   FALLBACK PRODUCT
+========================================================= */
+
+.productArtwork {
+  position: relative;
+
+  width: 250px;
+  height: 250px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform:
+    rotate(-7deg);
+}
+
+.outerRing,
+.innerRing {
+  position: absolute;
+
+  border-radius: 50%;
+}
+
+.outerRing {
+  width: 185px;
+  height: 185px;
+
+  border:
+    25px solid #293a48;
+
+  box-shadow:
+    inset
+    0
+    0
+    0
+    5px
+    #d99b50,
+    0
+    16px
+    24px
+    rgba(
+      20,
+      43,
+      64,
+      0.16
+    );
+}
+
+.innerRing {
+  width: 90px;
+  height: 90px;
+
+  border:
+    9px solid #ffffff;
+
+  box-shadow:
+    0
+    0
+    0
+    5px
+    #075bb7;
+}
+
+
+/* =========================================================
+   INFORMATION
+========================================================= */
+
+.information {
+  padding:
+    38px
+    36px
+    30px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.category {
+  margin-bottom: 5px;
+
+  color: #788a9d;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.information h2 {
+  margin: 0;
+
+  padding-right: 30px;
+
+  color: #24374d;
+
+  font-size: 24px;
+
+  line-height: 1.35;
+}
+
+.code {
+  margin-top: 7px;
+
+  color: #8a98a7;
+
+  font-family: monospace;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.price {
+  margin-top: 15px;
+
+  color: #ed1c24;
+
+  font-size: 25px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.details {
+  margin-top: 20px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.details > div {
+  min-height: 60px;
+
+  padding:
+    10px
+    12px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  border:
+    1px solid #e1e7ee;
+
+  border-radius: 5px;
+
+  background: #f8fafc;
+}
+
+.details span {
+  color: #8695a6;
+
+  font-size: 10px;
+}
+
+.details strong {
+  color: #294563;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.stockStatus {
+  width: fit-content;
+
+  min-height: 24px;
+
+  margin-top: 13px;
+
+  padding:
+    0
+    10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.stockReady {
+  background: #e8f8f2;
+
+  color: #11865f;
+}
+
+.stockWarning {
+  background: #fff5dc;
+
+  color: #b47b0e;
+}
+
+.stockDanger {
+  background: #ffeded;
+
+  color: #ca453f;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description {
+  margin-top: 17px;
+
+  color: #52677d;
+
+  font-size: 12px;
+
+  line-height: 1.65;
+}
+
+.description p {
+  margin:
+    0
+    0
+    7px;
+}
+
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.bottom {
+  margin-top: auto;
+
+  padding-top: 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* =========================================================
+   QUANTITY
+========================================================= */
+
+.quantity {
+  height: 42px;
+
+  display: grid;
+
+  grid-template-columns:
+    37px
+    42px
+    37px;
+
+  overflow: hidden;
+
+  border:
+    1px solid #d9e0e8;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+}
+
+.quantity button {
+  padding: 0;
+
+  border: 0;
+
+  background: #f7f9fb;
+
+  color: #31475f;
+
+  font-size: 19px;
+
+  cursor: pointer;
+}
+
+.quantity button:hover:not(:disabled) {
+  background: #edf3f8;
+}
+
+.quantity button:disabled {
+  color: #bbc4ce;
+
+  cursor: not-allowed;
+}
+
+.quantity span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-left:
+    1px solid #e3e8ed;
+
+  border-right:
+    1px solid #e3e8ed;
+
+  color: #273d54;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.addButton {
+  height: 42px;
+
+  flex: 1;
+
+  padding:
+    0
+    20px;
+
+  border: 0;
+
+  border-radius: 5px;
+
+  background: #075bb7;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.addButton:hover:not(:disabled) {
+  background: #064b94;
+}
+
+.addButton:disabled {
+  background: #aab5c0;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 760px) {
+
+  .overlay {
+    padding: 15px;
+  }
+
+  .modal {
+    width: 100%;
+
+    max-height:
+      calc(
+        100vh - 30px
+      );
+
+    display: block;
+
+    overflow-y: auto;
+  }
+
+  .imageArea {
+    min-height: 280px;
+
+    border-right: 0;
+
+    border-bottom:
+      1px solid #e7ebef;
+  }
+
+  .productArtwork {
+    transform:
+      rotate(-7deg)
+      scale(0.8);
+  }
+
+  .information {
+    padding:
+      28px
+      25px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .overlay {
+    padding: 8px;
+  }
+
+  .modal {
+    max-height:
+      calc(
+        100vh - 16px
+      );
+  }
+
+  .imageArea {
+    min-height: 230px;
+
+    padding: 20px;
+  }
+
+  .productArtwork {
+    transform:
+      rotate(-7deg)
+      scale(0.65);
+  }
+
+  .information {
+    padding:
+      24px
+      18px;
+  }
+
+  .information h2 {
+    font-size: 20px;
+  }
+
+  .price {
+    font-size: 22px;
+  }
+
+  .details {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .quantity {
+    width: 100%;
+
+    grid-template-columns:
+      1fr
+      55px
+      1fr;
+  }
+
+  .addButton {
+    width: 100%;
+  }
+
+}

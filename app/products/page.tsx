@@ -1,23 +1,39 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import styles from "./ProductsPage.module.css";
 
-type Product = {
-  id: number;
-  name: string;
-  code: string;
-  category: string;
-  material: string;
-  price: number;
-  stock: number;
-  reserved: number;
-};
+import SiteHeader from "../../components/layout/SiteHeader";
+import CartDrawer from "../../components/cart/CartDrawer";
+import ProductQuickView from "../../components/product/ProductQuickView";
+
+import type {
+  CartItem,
+} from "../../components/cart/types";
+
+import type {
+  ProductQuickViewData,
+} from "../../components/product/types";
+
+const CART_KEY =
+  "srr-demo-cart";
+
+/* =====================================================
+   PRODUCT TYPE
+===================================================== */
+
+type Product =
+  ProductQuickViewData & {
+    reserved: number;
+  };
 
 /* =====================================================
    PRODUCT CATEGORIES
-   ใช้ชุดเดียวกับ HomePage.tsx
 ===================================================== */
 
 const categories = [
@@ -69,8 +85,7 @@ const categories = [
 ];
 
 /* =====================================================
-   SIDEBAR CATEGORIES
-   เหมือน HomePage.tsx
+   SIDEBAR
 ===================================================== */
 
 const sideCategories = [
@@ -125,7 +140,7 @@ const sideCategories = [
 ];
 
 /* =====================================================
-   PRODUCTS
+   DEMO PRODUCTS
 ===================================================== */
 
 const products: Product[] = [
@@ -139,6 +154,7 @@ const products: Product[] = [
     stock: 820,
     reserved: 120,
   },
+
   {
     id: 2,
     name: "O-Ring NBR M60",
@@ -149,6 +165,7 @@ const products: Product[] = [
     stock: 650,
     reserved: 85,
   },
+
   {
     id: 3,
     name: "O-Ring EPDM M50",
@@ -159,6 +176,7 @@ const products: Product[] = [
     stock: 540,
     reserved: 40,
   },
+
   {
     id: 4,
     name: "O-Ring Viton M40",
@@ -169,6 +187,7 @@ const products: Product[] = [
     stock: 42,
     reserved: 20,
   },
+
   {
     id: 5,
     name: "O-Ring Silicone M30",
@@ -179,6 +198,7 @@ const products: Product[] = [
     stock: 0,
     reserved: 0,
   },
+
   {
     id: 6,
     name: "O-Ring NBR M50",
@@ -189,6 +209,7 @@ const products: Product[] = [
     stock: 280,
     reserved: 35,
   },
+
   {
     id: 7,
     name: "Oil Seal NBR 35",
@@ -199,6 +220,7 @@ const products: Product[] = [
     stock: 125,
     reserved: 15,
   },
+
   {
     id: 8,
     name: "Oil Seal Viton 40",
@@ -215,7 +237,9 @@ const products: Product[] = [
    STOCK STATUS
 ===================================================== */
 
-function getStockStatus(stock: number) {
+function getStockStatus(
+  stock: number
+) {
   if (stock === 0) {
     return {
       label: "หมดสต็อก",
@@ -237,377 +261,812 @@ function getStockStatus(stock: number) {
 }
 
 /* =====================================================
+   SEARCH ICON
+===================================================== */
+
+function SearchIcon() {
+  return (
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="6.5"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+
+      <path
+        d="M16 16L21 21"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* =====================================================
+   VIEW ICON
+===================================================== */
+
+function ViewIcon() {
+  return (
+    <svg
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+
+      <path
+        d="M16 16L21 21"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* =====================================================
    PAGE
 ===================================================== */
 
 export default function ProductsPage() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("ทั้งหมด");
-  const [status, setStatus] = useState("ทั้งหมด");
-  const [showInactive, setShowInactive] = useState(false);
+  /* =====================================================
+     FILTER
+  ===================================================== */
+
+  const [
+    search,
+    setSearch,
+  ] =
+    useState("");
+
+  const [
+    category,
+    setCategory,
+  ] =
+    useState("ทั้งหมด");
+
+  const [
+    status,
+    setStatus,
+  ] =
+    useState("ทั้งหมด");
+
+  const [
+    showInactive,
+    setShowInactive,
+  ] =
+    useState(false);
+
+  const [
+    sort,
+    setSort,
+  ] =
+    useState("latest");
+
+  /* =====================================================
+     SELECTED PRODUCT
+  ===================================================== */
+
+  const [
+    selectedProductId,
+    setSelectedProductId,
+  ] =
+    useState<
+      number | null
+    >(null);
+
+  /* =====================================================
+     QUICK VIEW
+  ===================================================== */
+
+  const [
+    quickViewProduct,
+    setQuickViewProduct,
+  ] =
+    useState<
+      ProductQuickViewData | null
+    >(null);
+
+  /* =====================================================
+     FAVORITES
+  ===================================================== */
+
+  const [
+    favoriteIds,
+    setFavoriteIds,
+  ] =
+    useState<
+      number[]
+    >([]);
+
+  /* =====================================================
+     CART
+  ===================================================== */
+
+  const [
+    cartItems,
+    setCartItems,
+  ] =
+    useState<
+      CartItem[]
+    >([]);
+
+  const [
+    cartLoaded,
+    setCartLoaded,
+  ] =
+    useState(false);
+
+  const [
+    isCartOpen,
+    setIsCartOpen,
+  ] =
+    useState(false);
+
+  /* =====================================================
+     LOAD CART
+  ===================================================== */
+
+  useEffect(() => {
+    try {
+      const saved =
+        window.localStorage.getItem(
+          CART_KEY
+        );
+
+      if (saved) {
+        const data =
+          JSON.parse(
+            saved
+          );
+
+        if (
+          Array.isArray(
+            data
+          )
+        ) {
+          setCartItems(
+            data
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        "Load cart error:",
+        error
+      );
+    } finally {
+      setCartLoaded(
+        true
+      );
+    }
+  }, []);
+
+  /* =====================================================
+     SAVE CART
+  ===================================================== */
+
+  useEffect(() => {
+    if (!cartLoaded) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      CART_KEY,
+      JSON.stringify(
+        cartItems
+      )
+    );
+
+    window.dispatchEvent(
+      new Event(
+        "srr-cart-updated"
+      )
+    );
+  }, [
+    cartItems,
+    cartLoaded,
+  ]);
+
+  /* =====================================================
+     CART COUNT
+  ===================================================== */
+
+  const cartCount =
+    cartItems.reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.quantity,
+      0
+    );
 
   /* =====================================================
      FILTER PRODUCTS
   ===================================================== */
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const keyword = search.toLowerCase().trim();
+  const filteredProducts =
+    useMemo(() => {
+      return products.filter(
+        (product) => {
+          const keyword =
+            search
+              .toLowerCase()
+              .trim();
 
-      const matchesSearch =
-        !keyword ||
-        product.name.toLowerCase().includes(keyword) ||
-        product.code.toLowerCase().includes(keyword) ||
-        product.material.toLowerCase().includes(keyword);
+          const matchesSearch =
+            !keyword ||
+            product.name
+              .toLowerCase()
+              .includes(
+                keyword
+              ) ||
+            product.code
+              .toLowerCase()
+              .includes(
+                keyword
+              ) ||
+            product.material
+              .toLowerCase()
+              .includes(
+                keyword
+              );
 
-      const matchesCategory =
-        category === "ทั้งหมด" ||
-        product.category === category;
+          const matchesCategory =
+            category ===
+              "ทั้งหมด" ||
+            product.category ===
+              category;
 
-      const productStatus = getStockStatus(product.stock);
+          const productStatus =
+            getStockStatus(
+              product.stock
+            );
 
-      const matchesStatus =
-        status === "ทั้งหมด" ||
-        productStatus.label === status;
+          const matchesStatus =
+            status ===
+              "ทั้งหมด" ||
+            productStatus.label ===
+              status;
 
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesStatus
+          return (
+            matchesSearch &&
+            matchesCategory &&
+            matchesStatus
+          );
+        }
       );
-    });
-  }, [search, category, status]);
+    }, [
+      search,
+      category,
+      status,
+    ]);
+
+  /* =====================================================
+     SORT
+  ===================================================== */
+
+  const displayedProducts =
+    useMemo(() => {
+      const result = [
+        ...filteredProducts,
+      ];
+
+      if (
+        sort ===
+        "latest"
+      ) {
+        result.sort(
+          (
+            a,
+            b
+          ) =>
+            b.id -
+            a.id
+        );
+      }
+
+      if (
+        sort ===
+        "price-low"
+      ) {
+        result.sort(
+          (
+            a,
+            b
+          ) =>
+            a.price -
+            b.price
+        );
+      }
+
+      if (
+        sort ===
+        "price-high"
+      ) {
+        result.sort(
+          (
+            a,
+            b
+          ) =>
+            b.price -
+            a.price
+        );
+      }
+
+      if (
+        sort ===
+        "name"
+      ) {
+        result.sort(
+          (
+            a,
+            b
+          ) =>
+            a.name.localeCompare(
+              b.name
+            )
+        );
+      }
+
+      return result;
+    }, [
+      filteredProducts,
+      sort,
+    ]);
 
   /* =====================================================
      SUMMARY
   ===================================================== */
 
-  const totalProducts = products.length;
+  const totalProducts =
+    products.length;
 
-  const sellingProducts = products.filter(
-    (product) => product.stock > 0
-  ).length;
+  const sellingProducts =
+    products.filter(
+      (product) =>
+        product.stock > 0
+    ).length;
 
-  const lowStockProducts = products.filter(
-    (product) =>
-      product.stock > 0 &&
-      product.stock <= 50
-  ).length;
+  const lowStockProducts =
+    products.filter(
+      (product) =>
+        product.stock > 0 &&
+        product.stock <= 50
+    ).length;
 
-  const outOfStockProducts = products.filter(
-    (product) => product.stock === 0
-  ).length;
+  const outOfStockProducts =
+    products.filter(
+      (product) =>
+        product.stock ===
+        0
+    ).length;
 
   /* =====================================================
-     RENDER
+     FAVORITE
+  ===================================================== */
+
+  function toggleFavorite(
+    productId: number
+  ) {
+    setFavoriteIds(
+      (current) => {
+        if (
+          current.includes(
+            productId
+          )
+        ) {
+          return current.filter(
+            (id) =>
+              id !==
+              productId
+          );
+        }
+
+        return [
+          ...current,
+          productId,
+        ];
+      }
+    );
+  }
+
+  /* =====================================================
+     ADD TO CART
+     ใช้ Product ตัวกลาง
+  ===================================================== */
+
+  function addToCart(
+    product: ProductQuickViewData,
+    quantityToAdd = 1
+  ) {
+    if (
+      product.stock <= 0
+    ) {
+      return;
+    }
+
+    const safeQuantity =
+      Math.max(
+        1,
+        Math.min(
+          quantityToAdd,
+          product.stock
+        )
+      );
+
+    setCartItems(
+      (current) => {
+        const existing =
+          current.find(
+            (item) =>
+              item.product.id ===
+              product.id
+          );
+
+        if (existing) {
+          return current.map(
+            (item) => {
+              if (
+                item.product.id !==
+                product.id
+              ) {
+                return item;
+              }
+
+              return {
+                ...item,
+
+                quantity:
+                  Math.min(
+                    item.quantity +
+                      safeQuantity,
+                    product.stock
+                  ),
+              };
+            }
+          );
+        }
+
+        return [
+          ...current,
+
+          {
+            product: {
+              id:
+                product.id,
+
+              name:
+                product.name,
+
+              code:
+                product.code,
+
+              category:
+                product.category,
+
+              material:
+                product.material,
+
+              price:
+                product.price,
+
+              stock:
+                product.stock,
+            },
+
+            quantity:
+              safeQuantity,
+          },
+        ];
+      }
+    );
+
+    setSelectedProductId(
+      product.id
+    );
+
+    setIsCartOpen(
+      true
+    );
+  }
+
+  /* =====================================================
+     INCREASE CART
+  ===================================================== */
+
+  function increaseCartItem(
+    productId: number
+  ) {
+    setCartItems(
+      (current) =>
+        current.map(
+          (item) => {
+            if (
+              item.product.id !==
+              productId
+            ) {
+              return item;
+            }
+
+            return {
+              ...item,
+
+              quantity:
+                Math.min(
+                  item.quantity +
+                    1,
+                  item.product.stock
+                ),
+            };
+          }
+        )
+    );
+  }
+
+  /* =====================================================
+     DECREASE CART
+  ===================================================== */
+
+  function decreaseCartItem(
+    productId: number
+  ) {
+    setCartItems(
+      (current) =>
+        current.flatMap(
+          (item) => {
+            if (
+              item.product.id !==
+              productId
+            ) {
+              return [
+                item,
+              ];
+            }
+
+            if (
+              item.quantity <=
+              1
+            ) {
+              return [];
+            }
+
+            return [
+              {
+                ...item,
+
+                quantity:
+                  item.quantity -
+                  1,
+              },
+            ];
+          }
+        )
+    );
+  }
+
+  /* =====================================================
+     REMOVE CART
+  ===================================================== */
+
+  function removeCartItem(
+    productId: number
+  ) {
+    setCartItems(
+      (current) =>
+        current.filter(
+          (item) =>
+            item.product.id !==
+            productId
+        )
+    );
+  }
+
+  /* =====================================================
+     VIEW CART
+  ===================================================== */
+
+  function handleViewCart() {
+    window.location.href =
+      "/cart";
+  }
+
+  /* =====================================================
+     CHECKOUT
+  ===================================================== */
+
+  function handleCheckout() {
+    window.location.href =
+      "/cart";
+  }
+
+  /* =====================================================
+     OPEN QUICK VIEW
+  ===================================================== */
+
+  function openQuickView(
+    product: ProductQuickViewData
+  ) {
+    setSelectedProductId(
+      product.id
+    );
+
+    setQuickViewProduct(
+      product
+    );
+  }
+
+  /* =====================================================
+     CLOSE QUICK VIEW
+  ===================================================== */
+
+  function closeQuickView() {
+    setQuickViewProduct(
+      null
+    );
+  }
+
+  /* =====================================================
+     RETURN
   ===================================================== */
 
   return (
-    <div className={styles.productsPage}>
+    <div
+      className={
+        styles.productsPage
+      }
+    >
 
-      {/* =====================================================
-          TOP CONTACT BAR
-      ===================================================== */}
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
-      <div className={styles.topbar}>
-        <div className={styles.container}>
+      <SiteHeader
+        cartCount={
+          cartCount
+        }
+        onCartClick={() =>
+          setIsCartOpen(
+            true
+          )
+        }
+      />
 
-          <div className={styles.companyMessage}>
-            จำหน่าย ซีล โอริง ประเก็น อะไหล่ ปั๊ม วาล์ว ทุกชนิด
-          </div>
 
-          <div className={styles.contactList}>
+      {/* =================================================
+          PRODUCTS LAYOUT
+      ================================================= */}
 
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"
-                />
-              </svg>
-              02-XXX-XXXX
-            </span>
+      <div
+        className={
+          styles.productsLayout
+        }
+      >
 
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 0c4.411 0 8 2.912 8 6.492 0 1.433-.555 2.723-1.715 3.994-1.678 1.932-5.431 4.285-6.285 4.645-.83.35-.734-.197-.696-.413l.003-.018.114-.685c.027-.204.055-.521-.026-.723-.09-.223-.444-.339-.704-.395C2.846 12.39 0 9.701 0 6.492 0 2.912 3.59 0 8 0" />
-              </svg>
-              @srrandsupply
-            </span>
+        {/* =============================================
+            SIDEBAR
+        ============================================= */}
 
-            <span className={styles.contactItem}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M2 2A2 2 0 0 0 .05 3.555L8 8.414l7.95-4.859A2 2 0 0 0 14 2zm-2 9.8V4.698l5.803 3.546zm6.761-2.97-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 9.671V4.697l-5.803 3.546.338.208A4.5 4.5 0 0 1 12.5 8c1.414 0 2.675.652 3.5 1.671" />
-              </svg>
-              info@srrandsupply.com
-            </span>
+        <aside
+          className={
+            styles.categorySidebar
+          }
+        >
 
+          <div
+            className={
+              styles.sidebarTitle
+            }
+          >
             <span>
-              จันทร์ - เสาร์ 8.00 - 17.00 น.
+              ☰
             </span>
 
-          </div>
-
-        </div>
-      </div>
-
-
-      {/* =====================================================
-          MAIN HEADER
-      ===================================================== */}
-
-      <header className={styles.header}>
-
-        <div className={styles.container}>
-
-          <div className={styles.headerInner}>
-
-            <Link href="/" className={styles.logo}>
-
-              <div className={styles.logoMark}>
-                <img
-                  src="/logo.jpg"
-                  alt="SRR AND SUPPLY"
-                />
-              </div>
-
-              <div className={styles.logoText}>
-                <strong>SRR AND SUPPLY</strong>
-                <span>HIGH QUALITY SEAL PRODUCTS</span>
-              </div>
-
-            </Link>
-
-
-            <div className={styles.headerSearch}>
-
-              <input
-                type="text"
-                placeholder="ค้นหาสินค้า, ขนาด, รุ่น, วัสดุ, รหัสสินค้า..."
-                aria-label="ค้นหาสินค้า"
-              />
-
-              <button
-                type="button"
-                aria-label="ค้นหา"
-              >
-                ⌕
-              </button>
-
-            </div>
-
-
-            <div className={styles.headerActions}>
-
-              <button
-                type="button"
-                className={styles.account}
-              >
-                <span className={styles.actionIcon}>
-                  ♙
-                </span>
-
-                <span>
-                  <strong>เข้าสู่ระบบ</strong>
-                  <small>สมาชิก</small>
-                </span>
-              </button>
-
-
-              <button
-                type="button"
-                className={styles.account}
-              >
-                <span className={styles.actionIcon}>
-                  ♙
-                </span>
-
-                <span>
-                  <strong>สมัครสมาชิก</strong>
-                  <small>สร้างบัญชี</small>
-                </span>
-              </button>
-
-
-              <button
-                type="button"
-                className={styles.cart}
-              >
-                <span className={styles.cartIcon}>
-                  🛒
-                </span>
-
-                <span>
-                  <strong>(0)</strong>
-                  <small>ตะกร้าสินค้า</small>
-                </span>
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </header>
-
-
-      {/* =====================================================
-          NAVIGATION
-      ===================================================== */}
-
-      <nav className={styles.navigation}>
-
-        <div className={styles.container}>
-
-          <div className={styles.navigationInner}>
-
-            <Link
-              href="/"
-              className={styles.navCategory}
-            >
-              ☰
-              <span>หมวดหมู่สินค้า</span>
-            </Link>
-
-            <Link href="/products">
-              O-Ring
-            </Link>
-
-            <Link href="/products">
-              Oil Seal
-            </Link>
-
-            <Link href="/products">
-              Hydraulic Seal
-            </Link>
-
-            <Link href="/products">
-              Pneumatic Seal
-            </Link>
-
-            <Link href="/products">
-              Rotary Seal
-            </Link>
-
-            <Link href="/products">
-              ประเก็น
-            </Link>
-
-            <Link href="/products">
-              อะไหล่ปั๊ม
-            </Link>
-
-            <Link href="/products">
-              วาล์ว
-            </Link>
-
-            <Link
-              href="/products"
-              className={styles.navAll}
-            >
-              ทั้งหมด⌄
-            </Link>
-
-            <Link
-              href="/contact"
-              className={styles.navContact}
-            >
-              ติดต่อเรา
-            </Link>
-
-          </div>
-
-        </div>
-
-      </nav>
-
-
-      {/* =====================================================
-          PRODUCTS PAGE
-          ของเดิมทั้งหมด
-      ===================================================== */}
-
-      <div className={styles.productsLayout}>
-
-        {/* =====================================================
-            LEFT SIDEBAR
-        ===================================================== */}
-
-        <aside className={styles.categorySidebar}>
-
-          <div className={styles.sidebarTitle}>
-            <span>☰</span>
             หมวดหมู่สินค้า
           </div>
 
-          <div className={styles.sidebarList}>
 
-            {sideCategories.map((item) => {
+          <div
+            className={
+              styles.sidebarList
+            }
+          >
 
-              const isActive =
-                item.category !== "" &&
-                category === item.category;
+            {sideCategories.map(
+              (item) => {
+                const isActive =
+                  item.category !==
+                    "" &&
+                  category ===
+                    item.category;
 
-              return (
-                <button
-                  type="button"
-                  key={item.label}
-                  className={`${styles.sidebarItem} ${
-                    isActive
-                      ? styles.sidebarItemActive
-                      : ""
-                  }`}
-                  onClick={() => {
-
-                    if (item.category !== "") {
-                      setCategory(item.category);
+                return (
+                  <button
+                    type="button"
+                    key={
+                      item.label
                     }
+                    className={`${styles.sidebarItem} ${
+                      isActive
+                        ? styles.sidebarItemActive
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (
+                        item.category !==
+                        ""
+                      ) {
+                        setCategory(
+                          item.category
+                        );
+                      }
+                    }}
+                  >
 
-                  }}
-                >
+                    <span
+                      className={
+                        styles.sidebarIcon
+                      }
+                    >
+                      ○
+                    </span>
 
-                  <span className={styles.sidebarIcon}>
-                    ○
-                  </span>
+                    <span
+                      className={
+                        styles.sidebarLabel
+                      }
+                    >
+                      {
+                        item.label
+                      }
+                    </span>
 
-                  <span className={styles.sidebarLabel}>
-                    {item.label}
-                  </span>
+                    <span
+                      className={
+                        styles.sidebarArrow
+                      }
+                    >
+                      ›
+                    </span>
 
-                  <span className={styles.sidebarArrow}>
-                    ›
-                  </span>
-
-                </button>
-              );
-
-            })}
+                  </button>
+                );
+              }
+            )}
 
           </div>
 
+
           <button
             type="button"
-            className={styles.sidebarButton}
-            onClick={() => setCategory("ทั้งหมด")}
+            className={
+              styles.sidebarButton
+            }
+            onClick={() =>
+              setCategory(
+                "ทั้งหมด"
+              )
+            }
           >
             ดูสินค้าทั้งหมด
           </button>
@@ -615,27 +1074,47 @@ export default function ProductsPage() {
         </aside>
 
 
-        {/* =====================================================
-            RIGHT CONTENT
-        ===================================================== */}
+        {/* =============================================
+            MAIN
+        ============================================= */}
 
-        <main className={styles.productsMain}>
+        <main
+          className={
+            styles.productsMain
+          }
+        >
 
-          {/* =====================================================
+          {/* =========================================
               PAGE HEADER
-          ===================================================== */}
+          ========================================= */}
 
-          <section className={styles.pageHeader}>
+          <section
+            className={
+              styles.pageHeader
+            }
+          >
 
             <div>
 
-              <div className={styles.breadcrumb}>
+              <div
+                className={
+                  styles.breadcrumb
+                }
+              >
                 จัดการสินค้า
-                <span>/</span>
+
+                <span>
+                  /
+                </span>
+
                 สินค้า
               </div>
 
-              <h1>สินค้า</h1>
+
+              <h1>
+                สินค้า
+              </h1>
+
 
               <p>
                 จัดการรายการสินค้า ราคา SKU และสถานะสต็อกของ SRR AND SUPPLY
@@ -643,46 +1122,80 @@ export default function ProductsPage() {
 
             </div>
 
-            <div className={styles.headerActions}>
-
-              
-
-            </div>
-
           </section>
 
 
-          {/* =====================================================
-              SUMMARY CARDS
-          ===================================================== */}
+          {/* =========================================
+              SUMMARY
+          ========================================= */}
 
-          <section className={styles.summaryGrid}>
+          <section
+            className={
+              styles.summaryGrid
+            }
+          >
 
-            <div className={styles.summaryCard}>
+            <div
+              className={
+                styles.summaryCard
+              }
+            >
 
-              <div className={styles.summaryIcon}>
+              <div
+                className={
+                  styles.summaryIcon
+                }
+              >
                 ▣
               </div>
 
               <div>
-                <span>สินค้าทั้งหมด</span>
-                <strong>{totalProducts}</strong>
-                <small>รายการสินค้า</small>
+                <span>
+                  สินค้าทั้งหมด
+                </span>
+
+                <strong>
+                  {
+                    totalProducts
+                  }
+                </strong>
+
+                <small>
+                  รายการสินค้า
+                </small>
               </div>
 
             </div>
 
 
-            <div className={styles.summaryCard}>
+            <div
+              className={
+                styles.summaryCard
+              }
+            >
 
-              <div className={styles.summaryIcon}>
+              <div
+                className={
+                  styles.summaryIcon
+                }
+              >
                 ✓
               </div>
 
               <div>
-                <span>สินค้าเปิดขาย</span>
-                <strong>{sellingProducts}</strong>
-                <small>รายการ</small>
+                <span>
+                  สินค้าเปิดขาย
+                </span>
+
+                <strong>
+                  {
+                    sellingProducts
+                  }
+                </strong>
+
+                <small>
+                  รายการ
+                </small>
               </div>
 
             </div>
@@ -692,14 +1205,28 @@ export default function ProductsPage() {
               className={`${styles.summaryCard} ${styles.warningCard}`}
             >
 
-              <div className={styles.summaryIcon}>
+              <div
+                className={
+                  styles.summaryIcon
+                }
+              >
                 △
               </div>
 
               <div>
-                <span>สินค้าใกล้หมด</span>
-                <strong>{lowStockProducts}</strong>
-                <small>ต้องตรวจสอบ</small>
+                <span>
+                  สินค้าใกล้หมด
+                </span>
+
+                <strong>
+                  {
+                    lowStockProducts
+                  }
+                </strong>
+
+                <small>
+                  ต้องตรวจสอบ
+                </small>
               </div>
 
             </div>
@@ -709,136 +1236,66 @@ export default function ProductsPage() {
               className={`${styles.summaryCard} ${styles.dangerCard}`}
             >
 
-              <div className={styles.summaryIcon}>
+              <div
+                className={
+                  styles.summaryIcon
+                }
+              >
                 !
               </div>
 
               <div>
-                <span>สินค้าหมด</span>
-                <strong>{outOfStockProducts}</strong>
-                <small>ต้องเติมสต็อก</small>
-              </div>
-
-            </div>
-
-          </section>
-
-
-          {/* =====================================================
-              CATEGORY GRID
-          ===================================================== */}
-
-          <section className={styles.categorySection}>
-
-            <div className={styles.categoryHeading}>
-
-              <div>
-                <h2>หมวดหมู่สินค้า</h2>
-
-                <p>
-                  เลือกดูสินค้าตามประเภทที่ต้องการ
-                </p>
-              </div>
-
-              {category !== "ทั้งหมด" && (
-                <button
-                  type="button"
-                  className={styles.clearCategory}
-                  onClick={() =>
-                    setCategory("ทั้งหมด")
-                  }
-                >
-                  แสดงสินค้าทั้งหมด →
-                </button>
-              )}
-
-            </div>
-
-
-            <div className={styles.categoryGrid}>
-
-              {/* ALL */}
-
-              <button
-                type="button"
-                className={`${styles.categoryCard} ${
-                  category === "ทั้งหมด"
-                    ? styles.categoryCardActive
-                    : ""
-                }`}
-                onClick={() =>
-                  setCategory("ทั้งหมด")
-                }
-              >
-
-                <div className={styles.categoryImage}>
-                  ▦
-                </div>
-
-                <strong>
-                  ทั้งหมด
-                </strong>
-
                 <span>
-                  สินค้าทั้งหมด
+                  สินค้าหมด
                 </span>
 
-              </button>
-
-
-              {/* CATEGORIES */}
-
-              {categories.map((item) => (
-
-                <button
-                  type="button"
-                  key={item.name}
-                  className={`${styles.categoryCard} ${
-                    category === item.name
-                      ? styles.categoryCardActive
-                      : ""
-                  }`}
-                  onClick={() =>
-                    setCategory(item.name)
+                <strong>
+                  {
+                    outOfStockProducts
                   }
-                >
+                </strong>
 
-                  <div className={styles.categoryImage}>
-                    {item.icon}
-                  </div>
-
-                  <strong>
-                    {item.name}
-                  </strong>
-
-                  <span>
-                    {item.thai}
-                  </span>
-
-                </button>
-
-              ))}
+                <small>
+                  ต้องเติมสต็อก
+                </small>
+              </div>
 
             </div>
 
           </section>
 
 
-          {/* =====================================================
-              SEARCH / FILTER
-          ===================================================== */}
+          {/* =========================================
+              FILTER
+          ========================================= */}
 
-          <section className={styles.filterCard}>
+          <section
+            className={
+              styles.filterCard
+            }
+          >
 
-            <div className={styles.searchBox}>
+            <div
+              className={
+                styles.searchBox
+              }
+            >
 
-              <span>⌕</span>
+              <span>
+                <SearchIcon />
+              </span>
 
               <input
                 type="text"
-                value={search}
-                onChange={(event) =>
-                  setSearch(event.target.value)
+                value={
+                  search
+                }
+                onChange={(
+                  event
+                ) =>
+                  setSearch(
+                    event.target.value
+                  )
                 }
                 placeholder="ค้นหาชื่อสินค้า, SKU, วัสดุ..."
               />
@@ -847,64 +1304,106 @@ export default function ProductsPage() {
 
 
             <select
-              className={styles.filterSelect}
-              value={category}
-              onChange={(event) =>
-                setCategory(event.target.value)
+              className={
+                styles.filterSelect
+              }
+              value={
+                category
+              }
+              onChange={(
+                event
+              ) =>
+                setCategory(
+                  event.target.value
+                )
               }
             >
 
-              <option value="ทั้งหมด">
+              <option
+                value="ทั้งหมด"
+              >
                 ทุกหมวดหมู่
               </option>
 
-              {categories.map((item) => (
+              {categories.map(
+                (item) => (
 
-                <option
-                  key={item.name}
-                  value={item.name}
-                >
-                  {item.name}
-                </option>
+                  <option
+                    key={
+                      item.name
+                    }
+                    value={
+                      item.name
+                    }
+                  >
+                    {
+                      item.name
+                    }
+                  </option>
 
-              ))}
+                )
+              )}
 
             </select>
 
 
             <select
-              className={styles.filterSelect}
-              value={status}
-              onChange={(event) =>
-                setStatus(event.target.value)
+              className={
+                styles.filterSelect
+              }
+              value={
+                status
+              }
+              onChange={(
+                event
+              ) =>
+                setStatus(
+                  event.target.value
+                )
               }
             >
 
-              <option value="ทั้งหมด">
+              <option
+                value="ทั้งหมด"
+              >
                 ทุกสถานะ
               </option>
 
-              <option value="พร้อมขาย">
+              <option
+                value="พร้อมขาย"
+              >
                 พร้อมขาย
               </option>
 
-              <option value="ใกล้หมด">
+              <option
+                value="ใกล้หมด"
+              >
                 ใกล้หมด
               </option>
 
-              <option value="หมดสต็อก">
+              <option
+                value="หมดสต็อก"
+              >
                 หมดสต็อก
               </option>
 
             </select>
 
 
-            <label className={styles.checkboxFilter}>
+            <label
+              className={
+                styles.checkboxFilter
+              }
+            >
 
               <input
                 type="checkbox"
-                checked={showInactive}
-                onChange={(event) =>
+                checked={
+                  showInactive
+                }
+                onChange={(
+                  event
+                ) =>
                   setShowInactive(
                     event.target.checked
                   )
@@ -920,350 +1419,420 @@ export default function ProductsPage() {
           </section>
 
 
-          {/* =====================================================
-              PRODUCT TABLE
-          ===================================================== */}
+          {/* =========================================
+              PRODUCT LIST
+          ========================================= */}
 
-          <section className={styles.tableCard}>
+          <section
+            className={
+              styles.shopSection
+            }
+          >
 
-            <div className={styles.tableHeader}>
+            {/* TOOLBAR */}
+
+            <div
+              className={
+                styles.shopToolbar
+              }
+            >
 
               <div>
 
                 <h2>
-                  {category === "ทั้งหมด"
-                    ? "รายการสินค้า"
-                    : `สินค้า ${category}`}
+                  รายการสินค้า
                 </h2>
 
                 <p>
-                  แสดง {filteredProducts.length} จาก{" "}
-                  {products.length} รายการ
+                  แสดง{" "}
+                  {
+                    displayedProducts.length
+                  }{" "}
+                  จาก{" "}
+                  {
+                    products.length
+                  }{" "}
+                  รายการ
                 </p>
 
               </div>
 
 
-              <div className={styles.tableActions}>
+              <div
+                className={
+                  styles.shopSort
+                }
+              >
 
-                <button
-                  type="button"
-                  className={styles.tableButton}
-                >
-                  ☷ &nbsp; ตัวกรอง
-                </button>
+                <span>
+                  เรียงตาม
+                </span>
 
-                <button
-                  type="button"
-                  className={styles.tableButton}
+                <select
+                  value={
+                    sort
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setSort(
+                      event.target.value
+                    )
+                  }
                 >
-                  ↓ &nbsp; ส่งออก
-                </button>
+
+                  <option
+                    value="latest"
+                  >
+                    ลำดับล่าสุด
+                  </option>
+
+                  <option
+                    value="price-low"
+                  >
+                    ราคาต่ำ - สูง
+                  </option>
+
+                  <option
+                    value="price-high"
+                  >
+                    ราคาสูง - ต่ำ
+                  </option>
+
+                  <option
+                    value="name"
+                  >
+                    ชื่อสินค้า
+                  </option>
+
+                </select>
 
               </div>
 
             </div>
 
 
-            <div className={styles.tableWrapper}>
+            {/* =========================================
+                GRID
+            ========================================= */}
 
-              <table className={styles.productsTable}>
+            <div
+              className={
+                styles.shopGrid
+              }
+            >
 
-                <thead>
+              {displayedProducts.map(
+                (product) => {
 
-                  <tr>
+                  const stockStatus =
+                    getStockStatus(
+                      product.stock
+                    );
 
-                    <th className={styles.checkColumn}>
-                      <input type="checkbox" />
-                    </th>
+                  const isSelected =
+                    selectedProductId ===
+                    product.id;
 
-                    <th>สินค้า</th>
-                    <th>SKU</th>
-                    <th>หมวดหมู่</th>
-                    <th>วัสดุ</th>
-                    <th>ราคาขาย</th>
-                    <th>สต็อก</th>
-                    <th>จองแล้ว</th>
-                    <th>คงเหลือ</th>
-                    <th>สถานะ</th>
-                    <th></th>
+                  const isFavorite =
+                    favoriteIds.includes(
+                      product.id
+                    );
 
-                  </tr>
+                  return (
 
-                </thead>
+                    <article
+                      key={
+                        product.id
+                      }
+                      className={`${styles.shopCard} ${
+                        isSelected
+                          ? styles.shopCardSelected
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setSelectedProductId(
+                          product.id
+                        )
+                      }
+                    >
+
+                      {/* FAVORITE */}
+
+                      <button
+                        type="button"
+                        className={`${styles.favoriteButton} ${
+                          isFavorite
+                            ? styles.favoriteButtonActive
+                            : ""
+                        }`}
+                        aria-label="รายการโปรด"
+                        onClick={(
+                          event
+                        ) => {
+
+                          event.stopPropagation();
+
+                          toggleFavorite(
+                            product.id
+                          );
+
+                        }}
+                      >
+                        {isFavorite
+                          ? "♥"
+                          : "♡"}
+                      </button>
 
 
-                <tbody>
+                      {/* =====================================
+                          PRODUCT IMAGE
+                      ===================================== */}
 
-                  {filteredProducts.map(
-                    (product) => {
+                      <div
+                        className={
+                          styles.shopImage
+                        }
+                        onClick={(
+                          event
+                        ) => {
 
-                      const stockStatus =
-                        getStockStatus(
-                          product.stock
-                        );
+                          event.stopPropagation();
 
-                      const remaining =
-                        product.stock -
-                        product.reserved;
+                          openQuickView(
+                            product
+                          );
 
-                      return (
+                        }}
+                      >
 
-                        <tr key={product.id}>
+                        {product.image ? (
 
-                          <td
+                          <img
+                            src={
+                              product.image
+                            }
+                            alt={
+                              product.name
+                            }
+                            style={{
+                              width:
+                                "100%",
+                              height:
+                                "100%",
+                              objectFit:
+                                "contain",
+                            }}
+                          />
+
+                        ) : (
+
+                          <div
                             className={
-                              styles.checkColumn
+                              styles.productArtwork
                             }
                           >
-                            <input type="checkbox" />
-                          </td>
-
-
-                          {/* PRODUCT */}
-
-                          <td>
-
-                            <div
-                              className={
-                                styles.productCell
-                              }
-                            >
-
-                              <div
-                                className={
-                                  styles.productIcon
-                                }
-                              >
-                                O
-                              </div>
-
-                              <div
-                                className={
-                                  styles.productName
-                                }
-                              >
-
-                                <strong>
-                                  {product.name}
-                                </strong>
-
-                                <span>
-                                  {product.code}
-                                </span>
-
-                              </div>
-
-                            </div>
-
-                          </td>
-
-
-                          {/* SKU */}
-
-                          <td>
 
                             <span
                               className={
-                                styles.sku
+                                styles.outerRing
                               }
-                            >
-                              {product.code}
-                            </span>
-
-                          </td>
-
-
-                          {/* CATEGORY */}
-
-                          <td>
-                            {product.category}
-                          </td>
-
-
-                          {/* MATERIAL */}
-
-                          <td>
+                            />
 
                             <span
                               className={
-                                styles.materialTag
+                                styles.innerRing
                               }
-                            >
-                              {product.material}
-                            </span>
+                            />
 
-                          </td>
+                          </div>
 
+                        )}
 
-                          {/* PRICE */}
-
-                          <td>
-
-                            <strong
-                              className={
-                                styles.price
-                              }
-                            >
-                              ฿{product.price}
-                            </strong>
-
-                          </td>
+                      </div>
 
 
-                          {/* STOCK */}
+                      {/* =====================================
+                          INFORMATION
+                      ===================================== */}
 
-                          <td>
-
-                            <strong
-                              className={
-                                product.stock === 0
-                                  ? styles.stockDanger
-                                  : product.stock <= 50
-                                    ? styles.stockWarning
-                                    : styles.stockGood
-                              }
-                            >
-                              {product.stock.toLocaleString()}
-                            </strong>
-
-                          </td>
-
-
-                          {/* RESERVED */}
-
-                          <td>
-                            {product.reserved.toLocaleString()}
-                          </td>
-
-
-                          {/* REMAINING */}
-
-                          <td>
-                            {remaining.toLocaleString()}
-                          </td>
-
-
-                          {/* STATUS */}
-
-                          <td>
-
-                            <span
-                              className={`${styles.status} ${
-                                styles[
-                                  stockStatus.type as keyof typeof styles
-                                ]
-                              }`}
-                            >
-
-                              <i />
-
-                              {stockStatus.label}
-
-                            </span>
-
-                          </td>
-
-
-                          {/* ACTION */}
-
-                          <td>
-
-                            <button
-                              type="button"
-                              className={
-                                styles.moreButton
-                              }
-                              aria-label={`จัดการ ${product.name}`}
-                            >
-                              •••
-                            </button>
-
-                          </td>
-
-                        </tr>
-
-                      );
-
-                    }
-                  )}
-
-
-                  {/* EMPTY */}
-
-                  {filteredProducts.length === 0 && (
-
-                    <tr>
-
-                      <td
-                        colSpan={11}
+                      <div
                         className={
-                          styles.emptyState
+                          styles.shopInfo
                         }
                       >
 
-                        <div>⌕</div>
-
-                        <strong>
-                          ไม่พบสินค้าที่ค้นหา
-                        </strong>
-
-                        <span>
-                          ลองเปลี่ยนคำค้นหาหรือตัวกรอง
+                        <span
+                          className={
+                            styles.shopCategory
+                          }
+                        >
+                          {
+                            product.category
+                          }
                         </span>
 
-                      </td>
 
-                    </tr>
-
-                  )}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-
-            {/* =====================================================
-                TABLE FOOTER
-            ===================================================== */}
-
-            <div className={styles.tableFooter}>
-
-              <span>
-                แสดง 1 - {filteredProducts.length} จาก{" "}
-                {filteredProducts.length} รายการ
-              </span>
+                        <div
+                          className={
+                            styles.shopName
+                          }
+                        >
+                          {
+                            product.name
+                          }
+                        </div>
 
 
-              <div className={styles.pagination}>
+                        <span
+                          className={
+                            styles.shopSku
+                          }
+                        >
+                          {
+                            product.code
+                          }
+                        </span>
 
-                <button
-                  type="button"
-                  disabled
-                >
-                  ‹
-                </button>
 
-                <button
-                  type="button"
+                        <div
+                          className={
+                            styles.shopBottom
+                          }
+                        >
+
+                          <strong
+                            className={
+                              styles.shopPrice
+                            }
+                          >
+                            ฿
+                            {product.price.toLocaleString()}
+                            .00
+                          </strong>
+
+
+                          <span
+                            className={`${styles.shopStock} ${
+                              product.stock ===
+                              0
+                                ? styles.shopStockDanger
+                                : product.stock <=
+                                    50
+                                  ? styles.shopStockWarning
+                                  : styles.shopStockReady
+                            }`}
+                          >
+                            {
+                              stockStatus.label
+                            }
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
+                      {/* =====================================
+                          ACTIONS
+                      ===================================== */}
+
+                      <div
+                        className={
+                          styles.cardActions
+                        }
+                      >
+
+                        {/* ADD CART */}
+
+                        <button
+                          type="button"
+                          className={
+                            styles.addCartButton
+                          }
+                          disabled={
+                            product.stock ===
+                            0
+                          }
+                          onClick={(
+                            event
+                          ) => {
+
+                            event.stopPropagation();
+
+                            addToCart(
+                              product,
+                              1
+                            );
+
+                          }}
+                        >
+                          {product.stock ===
+                          0
+                            ? "สินค้าหมด"
+                            : "หยิบใส่ตะกร้า"}
+                        </button>
+
+
+                        {/* QUICK VIEW */}
+
+                        <button
+                          type="button"
+                          className={
+                            styles.iconActionButton
+                          }
+                          title="ดูรายละเอียดสินค้า"
+                          aria-label="ดูรายละเอียดสินค้า"
+                          onClick={(
+                            event
+                          ) => {
+
+                            event.stopPropagation();
+
+                            openQuickView(
+                              product
+                            );
+
+                          }}
+                        >
+                          <ViewIcon />
+                        </button>
+
+                      </div>
+
+                    </article>
+
+                  );
+                }
+              )}
+
+
+              {/* =========================================
+                  EMPTY
+              ========================================= */}
+
+              {displayedProducts.length ===
+                0 && (
+
+                <div
                   className={
-                    styles.activePage
+                    styles.shopEmpty
                   }
                 >
-                  1
-                </button>
 
-                <button type="button">
-                  2
-                </button>
+                  <SearchIcon />
 
-                <button type="button">
-                  ›
-                </button>
+                  <strong>
+                    ไม่พบสินค้าที่ค้นหา
+                  </strong>
 
-              </div>
+                  <span>
+                    ลองเปลี่ยนคำค้นหา หมวดหมู่ หรือสถานะสินค้า
+                  </span>
+
+                </div>
+
+              )}
 
             </div>
 
@@ -1272,6 +1841,61 @@ export default function ProductsPage() {
         </main>
 
       </div>
+
+
+      {/* =================================================
+          PRODUCT QUICK VIEW
+      ================================================= */}
+
+      <ProductQuickView
+        open={
+          quickViewProduct !==
+          null
+        }
+        product={
+          quickViewProduct
+        }
+        onClose={
+          closeQuickView
+        }
+        onAddToCart={
+          addToCart
+        }
+      />
+
+
+      {/* =================================================
+          CART DRAWER
+      ================================================= */}
+
+      <CartDrawer
+        open={
+          isCartOpen
+        }
+        items={
+          cartItems
+        }
+        onClose={() =>
+          setIsCartOpen(
+            false
+          )
+        }
+        onIncrease={
+          increaseCartItem
+        }
+        onDecrease={
+          decreaseCartItem
+        }
+        onRemove={
+          removeCartItem
+        }
+        onViewCart={
+          handleViewCart
+        }
+        onCheckout={
+          handleCheckout
+        }
+      />
 
     </div>
   );
