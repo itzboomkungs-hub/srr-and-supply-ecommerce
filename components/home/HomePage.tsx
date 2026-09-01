@@ -1239,7 +1239,6 @@ export default function HomePage() {
 
                       {/* =================================
                           PRODUCT IMAGE
-                          ไม่ใช้ BUTTON แล้ว
                       ================================= */}
 
                       <div
@@ -1333,11 +1332,6 @@ export default function HomePage() {
                           }
                         </span>
 
-
-                        {/* =============================
-                            PRODUCT NAME
-                            ไม่ใช้ BUTTON แล้ว
-                        ============================= */}
 
                         <div
                           className={
@@ -1574,28 +1568,56 @@ export default function HomePage() {
         open={
           isCartOpen
         }
+
         items={
           cartItems
         }
+
         onClose={() =>
           setIsCartOpen(
             false
           )
         }
+
         onIncrease={
           increaseCartItem
         }
+
         onDecrease={
           decreaseCartItem
         }
+
         onRemove={
           removeCartItem
         }
+
+        /* ===============================================
+           ตะกร้าว่าง → กด "เลือกซื้อสินค้า"
+           ไปหน้า /products
+        =============================================== */
+        onContinueShopping={() => {
+          setIsCartOpen(false);
+
+          window.location.href =
+            "/products";
+        }}
+
+        /* ===============================================
+           ดูตะกร้าสินค้า
+        =============================================== */
         onViewCart={() => {
+          setIsCartOpen(false);
+
           window.location.href =
             "/cart";
         }}
+
+        /* ===============================================
+           ชำระเงิน
+        =============================================== */
         onCheckout={() => {
+          setIsCartOpen(false);
+
           window.location.href =
             "/cart";
         }}

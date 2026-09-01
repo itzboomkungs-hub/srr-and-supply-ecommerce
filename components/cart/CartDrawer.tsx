@@ -18,6 +18,9 @@ type CartDrawerProps = {
   onViewCart?: () => void;
 
   onCheckout?: () => void;
+
+  // กด "เลือกซื้อสินค้า" ตอนตะกร้าว่าง
+  onContinueShopping?: () => void;
 };
 
 /* =====================================================
@@ -157,6 +160,7 @@ export default function CartDrawer({
   onRemove,
   onViewCart,
   onCheckout,
+  onContinueShopping,
 }: CartDrawerProps) {
   const totalQuantity = items.reduce(
     (total, item) =>
@@ -264,7 +268,10 @@ export default function CartDrawer({
 
               <button
                 type="button"
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onContinueShopping?.();
+                }}
               >
                 เลือกซื้อสินค้า
               </button>
