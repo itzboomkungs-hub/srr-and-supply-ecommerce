@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   useEffect,
   useState,
@@ -57,6 +56,55 @@ export default function LoginPage() {
     useState<AuthTab>(
       "login"
     );
+
+  /* =====================================================
+     OPEN TAB FROM URL
+
+     /login?tab=login
+     = เข้าสู่ระบบ
+
+     /login?tab=register
+     = สมัครสมาชิก
+  ===================================================== */
+
+  useEffect(() => {
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const tab =
+      params.get("tab");
+
+    if (
+      tab === "register"
+    ) {
+      setActiveTab(
+        "register"
+      );
+    } else {
+      setActiveTab(
+        "login"
+      );
+    }
+  }, []);
+
+  /* =====================================================
+     AUTH NAVIGATION
+
+     ใช้ window.location.href
+     เพื่อให้โหลด tab ใหม่แน่นอน
+  ===================================================== */
+
+  function goToLogin() {
+    window.location.href =
+      "/login?tab=login";
+  }
+
+  function goToRegister() {
+    window.location.href =
+      "/login?tab=register";
+  }
 
   /* =====================================================
      FORM
@@ -209,6 +257,7 @@ export default function LoginPage() {
 
             return {
               ...item,
+
               quantity:
                 Math.min(
                   item.quantity +
@@ -248,8 +297,10 @@ export default function LoginPage() {
             return [
               {
                 ...item,
+
                 quantity:
-                  item.quantity - 1,
+                  item.quantity -
+                  1,
               },
             ];
           }
@@ -280,10 +331,17 @@ export default function LoginPage() {
       "/cart";
   }
 
+  function handleContinueShopping() {
+    setIsCartOpen(
+      false
+    );
+
+    window.location.href =
+      "/products";
+  }
+
   /* =====================================================
-     FORM ACTIONS
-     ตอนนี้ยังเป็น DEMO ก่อน
-     ภายหลังค่อยเอาไปเชื่อม SQL/API
+     LOGIN SUBMIT
   ===================================================== */
 
   function handleLoginSubmit(
@@ -299,6 +357,7 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกอีเมลหรือเบอร์โทรศัพท์"
       );
+
       return;
     }
 
@@ -308,6 +367,7 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกรหัสผ่าน"
       );
+
       return;
     }
 
@@ -320,6 +380,10 @@ export default function LoginPage() {
       "ทดสอบเข้าสู่ระบบเรียบร้อย (ยังไม่เชื่อม SQL)"
     );
   }
+
+  /* =====================================================
+     REGISTER SUBMIT
+  ===================================================== */
 
   function handleRegisterSubmit(
     event: FormEvent<
@@ -334,6 +398,7 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกชื่อ-นามสกุล"
       );
+
       return;
     }
 
@@ -343,6 +408,7 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกอีเมล"
       );
+
       return;
     }
 
@@ -352,6 +418,7 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกเบอร์โทรศัพท์"
       );
+
       return;
     }
 
@@ -361,6 +428,7 @@ export default function LoginPage() {
       alert(
         "กรุณาตั้งรหัสผ่าน"
       );
+
       return;
     }
 
@@ -371,6 +439,7 @@ export default function LoginPage() {
       alert(
         "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน"
       );
+
       return;
     }
 
@@ -394,6 +463,11 @@ export default function LoginPage() {
         styles.loginPage
       }
     >
+
+      {/* =================================================
+          HEADER
+      ================================================= */}
+
       <SiteHeader
         cartCount={
           cartCount
@@ -404,6 +478,10 @@ export default function LoginPage() {
           )
         }
       />
+
+      {/* =================================================
+          MAIN
+      ================================================= */}
 
       <main
         className={
@@ -420,6 +498,7 @@ export default function LoginPage() {
               styles.authLayout
             }
           >
+
             {/* =========================================
                 LEFT VISUAL
             ========================================= */}
@@ -476,6 +555,7 @@ export default function LoginPage() {
                     styles.visualFeatures
                   }
                 >
+
                   <div
                     className={
                       styles.visualFeature
@@ -499,6 +579,7 @@ export default function LoginPage() {
                       </span>
                     </div>
                   </div>
+
 
                   <div
                     className={
@@ -524,6 +605,7 @@ export default function LoginPage() {
                     </div>
                   </div>
 
+
                   <div
                     className={
                       styles.visualFeature
@@ -547,16 +629,17 @@ export default function LoginPage() {
                       </span>
                     </div>
                   </div>
+
                 </div>
 
                 <div
                   className={
                     styles.brandRow
                   }
-                >
-                  
-                </div>
+                />
+
               </div>
+
 
               <div
                 className={
@@ -568,7 +651,9 @@ export default function LoginPage() {
                   alt="SRR AND SUPPLY PRODUCTS"
                 />
               </div>
+
             </div>
+
 
             {/* =========================================
                 RIGHT AUTH CARD
@@ -579,16 +664,27 @@ export default function LoginPage() {
                 styles.authPanel
               }
             >
+
               <div
                 className={
                   styles.authCard
                 }
               >
+
+                {/* =====================================
+                    TABS
+                ===================================== */}
+
                 <div
                   className={
                     styles.authTabs
                   }
                 >
+
+                  {/* ================================
+                      LOGIN TAB
+                  ================================ */}
+
                   <button
                     type="button"
                     className={`${styles.authTab} ${
@@ -597,14 +693,17 @@ export default function LoginPage() {
                         ? styles.authTabActive
                         : ""
                     }`}
-                    onClick={() =>
-                      setActiveTab(
-                        "login"
-                      )
+                    onClick={
+                      goToLogin
                     }
                   >
                     เข้าสู่ระบบ
                   </button>
+
+
+                  {/* ================================
+                      REGISTER TAB
+                  ================================ */}
 
                   <button
                     type="button"
@@ -614,18 +713,23 @@ export default function LoginPage() {
                         ? styles.authTabActive
                         : ""
                     }`}
-                    onClick={() =>
-                      setActiveTab(
-                        "register"
-                      )
+                    onClick={
+                      goToRegister
                     }
                   >
                     สมัครสมาชิก
                   </button>
+
                 </div>
+
+
+                {/* =====================================
+                    LOGIN FORM
+                ===================================== */}
 
                 {activeTab ===
                 "login" ? (
+
                   <form
                     className={
                       styles.form
@@ -634,6 +738,7 @@ export default function LoginPage() {
                       handleLoginSubmit
                     }
                   >
+
                     <div
                       className={
                         styles.formHeader
@@ -647,6 +752,7 @@ export default function LoginPage() {
                         เข้าสู่ระบบเพื่อจัดการคำสั่งซื้อและข้อมูลของคุณ
                       </p>
                     </div>
+
 
                     <div
                       className={
@@ -670,6 +776,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               identity:
                                 event
                                   .target
@@ -680,6 +787,7 @@ export default function LoginPage() {
                         placeholder="กรอกอีเมลหรือเบอร์โทรศัพท์"
                       />
                     </div>
+
 
                     <div
                       className={
@@ -703,6 +811,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               password:
                                 event
                                   .target
@@ -714,11 +823,13 @@ export default function LoginPage() {
                       />
                     </div>
 
+
                     <div
                       className={
                         styles.formOptions
                       }
                     >
+
                       <label
                         className={
                           styles.checkbox
@@ -737,6 +848,7 @@ export default function LoginPage() {
                                 current
                               ) => ({
                                 ...current,
+
                                 remember:
                                   event
                                     .target
@@ -751,6 +863,7 @@ export default function LoginPage() {
                         </span>
                       </label>
 
+
                       <button
                         type="button"
                         className={
@@ -759,7 +872,9 @@ export default function LoginPage() {
                       >
                         ลืมรหัสผ่าน?
                       </button>
+
                     </div>
+
 
                     <button
                       type="submit"
@@ -769,6 +884,7 @@ export default function LoginPage() {
                     >
                       เข้าสู่ระบบ
                     </button>
+
 
                     <div
                       className={
@@ -780,21 +896,34 @@ export default function LoginPage() {
                       </span>
                     </div>
 
+
+                    {/* =================================
+                        สมัครสมาชิกใหม่
+
+                        กดแล้วโหลด
+                        /login?tab=register
+                    ================================= */}
+
                     <button
                       type="button"
                       className={
                         styles.secondaryButton
                       }
-                      onClick={() =>
-                        setActiveTab(
-                          "register"
-                        )
+                      onClick={
+                        goToRegister
                       }
                     >
                       สมัครสมาชิกใหม่
                     </button>
+
                   </form>
+
                 ) : (
+
+                  /* =====================================
+                     REGISTER FORM
+                  ===================================== */
+
                   <form
                     className={
                       styles.form
@@ -803,6 +932,7 @@ export default function LoginPage() {
                       handleRegisterSubmit
                     }
                   >
+
                     <div
                       className={
                         styles.formHeader
@@ -816,6 +946,7 @@ export default function LoginPage() {
                         สร้างบัญชีเพื่อใช้งานและสั่งซื้อสินค้า
                       </p>
                     </div>
+
 
                     <div
                       className={
@@ -839,6 +970,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               fullName:
                                 event
                                   .target
@@ -849,6 +981,7 @@ export default function LoginPage() {
                         placeholder="กรอกชื่อ-นามสกุล"
                       />
                     </div>
+
 
                     <div
                       className={
@@ -872,6 +1005,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               email:
                                 event
                                   .target
@@ -882,6 +1016,7 @@ export default function LoginPage() {
                         placeholder="example@email.com"
                       />
                     </div>
+
 
                     <div
                       className={
@@ -905,6 +1040,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               phone:
                                 event
                                   .target
@@ -915,6 +1051,7 @@ export default function LoginPage() {
                         placeholder="081-234-5678"
                       />
                     </div>
+
 
                     <div
                       className={
@@ -938,6 +1075,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               password:
                                 event
                                   .target
@@ -948,6 +1086,7 @@ export default function LoginPage() {
                         placeholder="ตั้งรหัสผ่าน"
                       />
                     </div>
+
 
                     <div
                       className={
@@ -971,6 +1110,7 @@ export default function LoginPage() {
                               current
                             ) => ({
                               ...current,
+
                               confirmPassword:
                                 event
                                   .target
@@ -982,6 +1122,7 @@ export default function LoginPage() {
                       />
                     </div>
 
+
                     <button
                       type="submit"
                       className={
@@ -991,65 +1132,92 @@ export default function LoginPage() {
                       สมัครสมาชิก
                     </button>
 
+
                     <div
                       className={
                         styles.registerFooter
                       }
                     >
+
                       <span>
                         มีบัญชีอยู่แล้ว?
                       </span>
+
+
+                      {/* =============================
+                          กลับเข้าสู่ระบบ
+                      ============================= */}
 
                       <button
                         type="button"
                         className={
                           styles.textLink
                         }
-                        onClick={() =>
-                          setActiveTab(
-                            "login"
-                          )
+                        onClick={
+                          goToLogin
                         }
                       >
                         เข้าสู่ระบบ
                       </button>
+
                     </div>
+
                   </form>
+
                 )}
+
               </div>
             </div>
+
           </section>
         </div>
       </main>
+
+
+      {/* =================================================
+          CART DRAWER
+      ================================================= */}
 
       <CartDrawer
         open={
           isCartOpen
         }
+
         items={
           cartItems
         }
+
         onClose={() =>
           setIsCartOpen(
             false
           )
         }
+
         onIncrease={
           increaseCartItem
         }
+
         onDecrease={
           decreaseCartItem
         }
+
         onRemove={
           removeCartItem
         }
+
+        onContinueShopping={
+          handleContinueShopping
+        }
+
         onViewCart={
           handleViewCart
         }
+
         onCheckout={
           handleCheckout
         }
       />
+
     </div>
   );
 }

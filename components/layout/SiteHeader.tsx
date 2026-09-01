@@ -270,6 +270,7 @@ export default function SiteHeader({
       router.push(
         "/products"
       );
+
       return;
     }
 
@@ -289,6 +290,7 @@ export default function SiteHeader({
       onCartClick
     ) {
       onCartClick();
+
       return;
     }
 
@@ -496,10 +498,15 @@ export default function SiteHeader({
               }
             >
 
-              {/* LOGIN */}
+              {/* =====================================
+                  LOGIN
 
-              <Link
-                href="/login"
+                  ใช้ <a> เพื่อให้โหลดหน้าใหม่
+                  ทำให้ ?tab=login ถูกอ่านใหม่ทุกครั้ง
+              ===================================== */}
+
+              <a
+                href="/login?tab=login"
                 className={
                   styles.account
                 }
@@ -524,13 +531,18 @@ export default function SiteHeader({
                   </small>
                 </span>
 
-              </Link>
+              </a>
 
 
-              {/* REGISTER */}
+              {/* =====================================
+                  REGISTER
 
-              <Link
-                href="/login?mode=register"
+                  ใช้ <a> เพื่อให้โหลดหน้าใหม่
+                  ทำให้ ?tab=register ถูกอ่านใหม่ทุกครั้ง
+              ===================================== */}
+
+              <a
+                href="/login?tab=register"
                 className={
                   styles.account
                 }
@@ -555,10 +567,12 @@ export default function SiteHeader({
                   </small>
                 </span>
 
-              </Link>
+              </a>
 
 
-              {/* CART */}
+              {/* =====================================
+                  CART
+              ===================================== */}
 
               <button
                 type="button"
