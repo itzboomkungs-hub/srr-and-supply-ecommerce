@@ -796,6 +796,10 @@ export default function HomePage() {
               }
             >
 
+              {/* =======================================
+                  HERO LEFT CONTENT
+              ======================================= */}
+
               <div
                 className={
                   styles.heroContent
@@ -901,18 +905,48 @@ export default function HomePage() {
               </div>
 
 
+              {/* =======================================
+                  HERO RIGHT IMAGE
+
+                  ไฟล์ภาพ:
+                  public/logo/hero-industrial-parts.png
+              ======================================= */}
+
               <div
                 className={
                   styles.heroProducts
                 }
+                style={{
+                  width: "48%",
+                  height: "100%",
+                  minHeight: "360px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  padding: "18px",
+                  boxSizing: "border-box",
+                }}
               >
+
                 <img
-                  src="/logo/hero-products.png"
-                  alt="ซีลและอะไหล่อุตสาหกรรม SRR AND SUPPLY"
+                  src="/logo/hero-industrial-parts.png"
+                  alt="ซีล โอริง ประเก็น อะไหล่ปั๊ม วาล์ว และอะไหล่อุตสาหกรรม SRR AND SUPPLY"
                   className={
                     styles.heroImage
                   }
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    maxWidth: "580px",
+                    maxHeight: "390px",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                    borderRadius: "12px",
+                  }}
                 />
+
               </div>
 
             </section>
@@ -1591,32 +1625,28 @@ export default function HomePage() {
           removeCartItem
         }
 
-        /* ===============================================
-           ตะกร้าว่าง → กด "เลือกซื้อสินค้า"
-           ไปหน้า /products
-        =============================================== */
         onContinueShopping={() => {
-          setIsCartOpen(false);
+          setIsCartOpen(
+            false
+          );
 
           window.location.href =
             "/products";
         }}
 
-        /* ===============================================
-           ดูตะกร้าสินค้า
-        =============================================== */
         onViewCart={() => {
-          setIsCartOpen(false);
+          setIsCartOpen(
+            false
+          );
 
           window.location.href =
             "/cart";
         }}
 
-        /* ===============================================
-           ชำระเงิน
-        =============================================== */
         onCheckout={() => {
-          setIsCartOpen(false);
+          setIsCartOpen(
+            false
+          );
 
           window.location.href =
             "/cart";
