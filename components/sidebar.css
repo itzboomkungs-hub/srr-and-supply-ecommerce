@@ -19,6 +19,24 @@
   z-index: 100;
 
   overflow: hidden;
+
+  transform: translateX(0);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+
+  will-change: transform;
+}
+
+/*
+  Desktop:
+  Sidebar แสดงตลอด
+*/
+
+.sidebar.sidebar-visible,
+.sidebar.sidebar-hidden {
+  transform: translateX(0);
 }
 
 
@@ -69,6 +87,7 @@
   line-height: 18px;
 
   font-weight: 800;
+
   letter-spacing: 0.1px;
 
   white-space: nowrap;
@@ -81,6 +100,7 @@
   line-height: 12px;
 
   font-weight: 600;
+
   letter-spacing: 0.7px;
 
   opacity: 0.82;
@@ -98,6 +118,8 @@
   overflow-x: hidden;
 
   padding: 14px 8px 90px;
+
+  overscroll-behavior: contain;
 }
 
 .sidebar-nav::-webkit-scrollbar {
@@ -111,6 +133,10 @@
 .sidebar-nav::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.28);
   border-radius: 10px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 
@@ -159,7 +185,7 @@
 }
 
 .sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-item.active {
@@ -193,13 +219,15 @@
 
   text-align: left;
 
+  cursor: pointer;
+
   transition:
     background 0.15s ease,
     color 0.15s ease;
 }
 
 .sidebar-group-button:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-group-button.active {
@@ -228,6 +256,9 @@
   flex: 1;
 
   min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   font-size: 13px;
   font-weight: 600;
@@ -336,13 +367,15 @@
 }
 
 .sidebar-submenu-item:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
 
 .sidebar-submenu-item.active {
   background: rgba(255, 255, 255, 0.14);
+
   color: #ffffff;
+
   font-weight: 700;
 }
 
@@ -363,8 +396,7 @@
   line-height: 1;
 }
 
-.sidebar-submenu-item.active
-.sidebar-submenu-dot {
+.sidebar-submenu-item.active .sidebar-submenu-dot {
   color: #52d4df;
 }
 
@@ -420,6 +452,9 @@
 }
 
 .sidebar-user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   font-size: 13px;
   font-weight: 700;
 
@@ -428,6 +463,9 @@
 
 .sidebar-user-role {
   margin-top: 2px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   color: rgba(255, 255, 255, 0.65);
 
@@ -440,6 +478,33 @@
   font-size: 13px;
 
   opacity: 0.8;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================
+   MOBILE OVERLAY
+========================================= */
+
+.mobile-overlay {
+  display: none;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .sidebar {
+    width: 220px;
+  }
 }
 
 
@@ -449,6 +514,101 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 234px;
+    width: min(234px, 86vw);
+
+    transform: translateX(-100%);
+
+    box-shadow: none;
+
+    z-index: 1001;
+  }
+
+  .sidebar.sidebar-visible {
+    transform: translateX(0);
+
+    box-shadow:
+      12px 0 35px rgba(12, 37, 62, 0.24);
+  }
+
+  .sidebar.sidebar-hidden {
+    transform: translateX(-100%);
+  }
+
+  .mobile-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(11, 29, 48, 0.42);
+
+    border: 0;
+
+    z-index: 1000;
+
+    cursor: default;
+
+    animation: sidebarOverlayFade 0.18s ease;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: min(234px, 88vw);
+  }
+
+  .sidebar-brand {
+    height: 70px;
+
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .sidebar-nav {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+}
+
+
+/* =========================================
+   OVERLAY ANIMATION
+========================================= */
+
+@keyframes sidebarOverlayFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar-group-arrow,
+  .sidebar-item,
+  .sidebar-group-button,
+  .sidebar-submenu-item {
+    transition: none;
+  }
+
+  .mobile-overlay {
+    animation: none;
   }
 }

@@ -17,6 +17,11 @@ type MenuGroup = {
   badge?: number;
 };
 
+type SidebarProps = {
+  open?: boolean;
+  onClose?: () => void;
+};
+
 const menuGroups: MenuGroup[] = [
   {
     title: "ภาพรวม",
@@ -195,7 +200,10 @@ function getActiveGroup(pathname: string) {
   return null;
 }
 
-export default function Sidebar() {
+export default function Sidebar({
+  open = true,
+  onClose,
+}: SidebarProps) {
   const pathname = usePathname();
 
   const [openGroup, setOpenGroup] = useState<string | null>(
@@ -213,7 +221,9 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
+    <aside
+  className={`sidebar ${open ? "sidebar-visible" : "sidebar-hidden"}`}
+>
       {/* BRAND */}
       <div className="sidebar-brand">
         <div className="sidebar-logo">
