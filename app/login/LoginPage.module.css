@@ -13,7 +13,11 @@
 }
 
 .container {
-  width: min(1380px, calc(100% - 48px));
+  width: min(
+    1380px,
+    calc(100% - 48px)
+  );
+
   margin: 0 auto;
 }
 
@@ -24,8 +28,13 @@
 
 .authLayout {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+
+  grid-template-columns:
+    1.05fr
+    0.95fr;
+
   gap: 28px;
+
   align-items: stretch;
 }
 
@@ -36,9 +45,15 @@
 
 .authVisual {
   position: relative;
+
   min-height: 720px;
+
   overflow: hidden;
+
   border-radius: 24px;
+
+  isolation: isolate;
+
   background:
     linear-gradient(
       135deg,
@@ -46,146 +61,408 @@
       #0a2e63 60%,
       #082448 100%
     );
-  box-shadow: 0 20px 50px rgba(15, 61, 130, 0.16);
-}
 
-.visualOverlay {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(255, 255, 255, 0.18),
-      transparent 35%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(7, 36, 82, 0.22) 0%,
-      rgba(7, 36, 82, 0.58) 100%
+  box-shadow:
+    0 20px 50px
+    rgba(
+      15,
+      61,
+      130,
+      0.16
     );
 }
 
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+
+.visualProducts {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.visualProducts img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  /*
+    สำคัญ:
+    เดิมเป็น center bottom
+    ทำให้รูปถูกดันขึ้นและวาล์วชนขอบบน
+
+    ตอนนี้ให้ยึดใกล้กึ่งกลางแทน
+  */
+  object-position:
+    center 44%;
+
+  /*
+    ขยับภาพซ้ายเล็กน้อย
+    และลงมานิดหนึ่ง
+  */
+  transform:
+    translate(
+      -0.5%,
+      3.5%
+    )
+    scale(1.06);
+
+  transform-origin:
+    center center;
+
+  filter:
+    saturate(0.96)
+    contrast(1.02);
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+========================================================= */
+
+.visualOverlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(
+        255,
+        255,
+        255,
+        0.13
+      ),
+      transparent 31%
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(
+        4,
+        31,
+        70,
+        0.97
+      ) 0%,
+
+      rgba(
+        5,
+        39,
+        85,
+        0.91
+      ) 30%,
+
+      rgba(
+        5,
+        39,
+        85,
+        0.70
+      ) 55%,
+
+      rgba(
+        5,
+        39,
+        85,
+        0.28
+      ) 78%,
+
+      rgba(
+        5,
+        39,
+        85,
+        0.12
+      ) 100%
+    ),
+
+    linear-gradient(
+      180deg,
+      rgba(
+        7,
+        36,
+        82,
+        0.14
+      ) 0%,
+
+      rgba(
+        7,
+        36,
+        82,
+        0.38
+      ) 100%
+    );
+}
+
+
+/* =========================================================
+   VISUAL CONTENT
+========================================================= */
+
 .visualContent {
   position: relative;
+
   z-index: 2;
-  max-width: 540px;
-  padding: 56px 48px 300px;
+
+  width: 100%;
+  max-width: 570px;
+
+  padding:
+    56px
+    48px
+    52px;
+
+  box-sizing: border-box;
+
   color: #ffffff;
 }
 
+
+/* =========================================================
+   BADGE
+========================================================= */
+
 .visualBadge {
+  min-height: 34px;
+
+  padding:
+    0
+    14px;
+
   display: inline-flex;
   align-items: center;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.32
+    );
+
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.11
+    );
+
+  color: #ffffff;
+
+  backdrop-filter: blur(8px);
+
   font-size: 12px;
-  font-weight: 700;
+
+  font-weight: 800;
+
   letter-spacing: 0.8px;
 }
 
+
+/* =========================================================
+   TITLE
+========================================================= */
+
 .visualTitle {
-  margin: 20px 0 18px;
+  margin:
+    22px
+    0
+    18px;
+
   color: #ffffff;
-  font-size: 52px;
+
+  font-size: 50px;
+
   line-height: 1.08;
+
   font-weight: 800;
+
   letter-spacing: -0.8px;
+
+  text-shadow:
+    0 3px 18px
+    rgba(
+      0,
+      0,
+      0,
+      0.14
+    );
 }
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
 
 .visualDescription {
+  max-width: 500px;
+
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 20px;
-  line-height: 1.7;
-  font-weight: 400;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.96
+    );
+
+  font-size: 19px;
+
+  line-height: 1.75;
+
+  font-weight: 500;
+
+  text-shadow:
+    0 2px 10px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
 }
 
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
 .visualFeatures {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  width: 100%;
+  max-width: 540px;
+
   margin-top: 32px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 12px;
 }
 
 .visualFeature {
   min-height: 126px;
-  padding: 18px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(5px);
+
+  padding:
+    17px
+    14px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.22
+    );
+
+  border-radius: 17px;
+
+  background:
+    rgba(
+      7,
+      48,
+      99,
+      0.54
+    );
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 12px 26px
+    rgba(
+      0,
+      0,
+      0,
+      0.08
+    );
+
+  box-sizing: border-box;
 }
 
 .featureIcon {
-  width: 46px;
-  height: 46px;
-  margin-bottom: 14px;
+  width: 44px;
+  height: 44px;
+
+  margin-bottom: 13px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.3
+    );
+
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
+
+  color: #ffffff;
+
   font-size: 18px;
 }
 
 .visualFeature strong {
   display: block;
+
   margin-bottom: 6px;
+
   color: #ffffff;
-  font-size: 16px;
+
+  font-size: 15px;
+
   line-height: 1.35;
+
   font-weight: 700;
 }
 
 .visualFeature span {
   display: block;
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 13px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.84
+    );
+
+  font-size: 12px;
+
   line-height: 1.55;
-}
-
-.brandRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 26px;
-}
-
-.brandRow span {
-  min-height: 40px;
-  padding: 0 16px;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-}
-
-.visualProducts {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  height: 310px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.visualProducts img {
-  width: min(92%, 720px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 18px 38px rgba(0, 0, 0, 0.28));
 }
 
 
@@ -195,6 +472,7 @@
 
 .authPanel {
   display: flex;
+
   align-items: center;
   justify-content: center;
 }
@@ -202,33 +480,73 @@
 .authCard {
   width: 100%;
   max-width: 620px;
-  padding: 28px 28px 30px;
-  border: 1px solid #d9e4f1;
+
+  padding:
+    28px
+    28px
+    30px;
+
+  border:
+    1px solid #d9e4f1;
+
   border-radius: 24px;
+
   background: #ffffff;
-  box-shadow: 0 18px 40px rgba(22, 67, 132, 0.08);
+
+  box-shadow:
+    0 18px 40px
+    rgba(
+      22,
+      67,
+      132,
+      0.08
+    );
+
+  box-sizing: border-box;
 }
 
+
+/* =========================================================
+   TABS
+========================================================= */
+
 .authTabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
   margin-bottom: 26px;
+
   padding: 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 10px;
+
   border-radius: 16px;
+
   background: #f3f7fc;
 }
 
 .authTab {
   min-height: 48px;
+
   border: 0;
+
   border-radius: 12px;
+
   background: transparent;
+
   color: #64809e;
+
   font-family: inherit;
+
   font-size: 15px;
+
   font-weight: 700;
+
   cursor: pointer;
+
   transition:
     background 0.18s ease,
     color 0.18s ease,
@@ -241,59 +559,108 @@
 
 .authTabActive {
   background: #ffffff;
+
   color: #0a4ea6;
-  box-shadow: 0 8px 18px rgba(10, 78, 166, 0.12);
+
+  box-shadow:
+    0 8px 18px
+    rgba(
+      10,
+      78,
+      166,
+      0.12
+    );
 }
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .form {
   display: flex;
+
   flex-direction: column;
+
   gap: 18px;
 }
 
 .formHeader h2 {
-  margin: 0 0 6px;
+  margin:
+    0
+    0
+    6px;
+
   color: #133d75;
+
   font-size: 30px;
+
   line-height: 1.2;
+
   font-weight: 800;
 }
 
 .formHeader p {
   margin: 0;
+
   color: #6f869f;
+
   font-size: 14px;
+
   line-height: 1.7;
 }
 
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
 .formGroup {
   display: flex;
+
   flex-direction: column;
+
   gap: 8px;
 }
 
 .formGroup label {
   color: #23456e;
+
   font-size: 13px;
+
   line-height: 1.3;
+
   font-weight: 700;
 }
 
 .formGroup input {
   width: 100%;
   height: 50px;
-  padding: 0 16px;
-  border: 1px solid #cfdae8;
+
+  padding:
+    0
+    16px;
+
+  border:
+    1px solid #cfdae8;
+
   border-radius: 12px;
+
   outline: none;
+
   background: #ffffff;
+
   color: #17324d;
+
   font-family: inherit;
+
   font-size: 14px;
+
+  box-sizing: border-box;
+
   transition:
     border-color 0.18s ease,
     box-shadow 0.18s ease;
-  box-sizing: border-box;
 }
 
 .formGroup input::placeholder {
@@ -302,41 +669,75 @@
 
 .formGroup input:focus {
   border-color: #0a5bb8;
-  box-shadow: 0 0 0 3px rgba(10, 91, 184, 0.08);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      10,
+      91,
+      184,
+      0.08
+    );
 }
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
 
 .formOptions {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
+
   gap: 16px;
 }
 
 .checkbox {
   display: inline-flex;
+
   align-items: center;
+
   gap: 10px;
+
   color: #355271;
+
   font-size: 14px;
+
   font-weight: 500;
+
   cursor: pointer;
 }
 
 .checkbox input {
   width: 16px;
   height: 16px;
+
   accent-color: #0a5bb8;
 }
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .primaryButton,
 .secondaryButton {
   width: 100%;
+
   min-height: 52px;
+
   border-radius: 12px;
+
   font-family: inherit;
+
   font-size: 15px;
+
   font-weight: 700;
+
   cursor: pointer;
+
   transition:
     transform 0.15s ease,
     box-shadow 0.18s ease,
@@ -347,82 +748,147 @@
 
 .primaryButton:hover,
 .secondaryButton:hover {
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 }
 
 .primaryButton {
   border: 0;
-  background: linear-gradient(
-    135deg,
-    #0b63c8 0%,
-    #084a9d 100%
-  );
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b63c8 0%,
+      #084a9d 100%
+    );
+
   color: #ffffff;
-  box-shadow: 0 12px 22px rgba(11, 99, 200, 0.18);
+
+  box-shadow:
+    0 12px 22px
+    rgba(
+      11,
+      99,
+      200,
+      0.18
+    );
 }
 
 .secondaryButton {
-  border: 1px solid #bcd0e7;
+  border:
+    1px solid #bcd0e7;
+
   background: #ffffff;
+
   color: #0b4fa6;
 }
 
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
 .divider {
   position: relative;
-  margin: 4px 0;
+
+  margin:
+    4px
+    0;
+
   text-align: center;
 }
 
 .divider::before {
   content: "";
+
   position: absolute;
+
   top: 50%;
   right: 0;
   left: 0;
+
   height: 1px;
+
   background: #dbe5f0;
-  transform: translateY(-50%);
+
+  transform:
+    translateY(-50%);
 }
 
 .divider span {
   position: relative;
+
   z-index: 1;
-  padding: 0 14px;
+
+  padding:
+    0
+    14px;
+
   background: #ffffff;
+
   color: #7f93a8;
+
   font-size: 13px;
+
   font-weight: 600;
 }
 
+
+/* =========================================================
+   TEXT LINK
+========================================================= */
+
 .textLink {
   padding: 0;
+
   border: 0;
+
   background: transparent;
+
   color: #0a5bb8;
+
   font-family: inherit;
+
   font-size: 14px;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
+
+/* =========================================================
+   REGISTER FOOTER
+========================================================= */
+
 .registerFooter {
+  margin-top: 2px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   gap: 8px;
-  margin-top: 2px;
+
   color: #6d859d;
+
   font-size: 14px;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE 1200
 ========================================================= */
 
 @media (max-width: 1200px) {
+
   .container {
-    width: min(100% - 36px, 1380px);
+    width:
+      min(
+        100% - 36px,
+        1380px
+      );
   }
 
   .authLayout {
@@ -430,7 +896,7 @@
   }
 
   .authVisual {
-    min-height: 620px;
+    min-height: 650px;
   }
 
   .authPanel {
@@ -440,51 +906,174 @@
   .authCard {
     max-width: none;
   }
+
+
+  /* ==============================
+     IMAGE TABLET
+  ============================== */
+
+  .visualProducts img {
+    object-position:
+      center 45%;
+
+    transform:
+      translate(
+        -2%,
+        2%
+      )
+      scale(1.01);
+  }
+
 }
 
+
+/* =========================================================
+   RESPONSIVE 900
+========================================================= */
+
 @media (max-width: 900px) {
+
   .authMain {
-    padding: 24px 0 36px;
+    padding:
+      24px
+      0
+      36px;
+  }
+
+  .authVisual {
+    min-height: 620px;
   }
 
   .visualContent {
-    padding: 34px 24px 230px;
+    max-width: 540px;
+
+    padding:
+      38px
+      28px
+      36px;
   }
 
   .visualTitle {
-    font-size: 38px;
+    font-size: 40px;
   }
 
   .visualDescription {
+    max-width: 470px;
+
     font-size: 17px;
   }
 
   .visualFeatures {
-    grid-template-columns: 1fr;
-  }
+    max-width: 510px;
 
-  .brandRow {
     gap: 10px;
   }
+
+  .visualFeature {
+    min-height: 116px;
+
+    padding:
+      15px
+      13px;
+  }
+
+
+  /* ==============================
+     IMAGE SMALL TABLET
+  ============================== */
+
+  .visualProducts img {
+    object-position:
+      center 46%;
+
+    transform:
+      translate(
+        -1.5%,
+        2%
+      )
+      scale(1.01);
+  }
+
+
+  .visualOverlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(
+          4,
+          31,
+          70,
+          0.96
+        ) 0%,
+
+        rgba(
+          5,
+          39,
+          85,
+          0.86
+        ) 48%,
+
+        rgba(
+          5,
+          39,
+          85,
+          0.40
+        ) 100%
+      ),
+
+      linear-gradient(
+        180deg,
+        rgba(
+          7,
+          36,
+          82,
+          0.18
+        ) 0%,
+
+        rgba(
+          7,
+          36,
+          82,
+          0.44
+        ) 100%
+      );
+  }
+
 }
 
+
+/* =========================================================
+   RESPONSIVE 640
+========================================================= */
+
 @media (max-width: 640px) {
+
   .container {
-    width: min(100% - 24px, 1380px);
+    width:
+      min(
+        100% - 24px,
+        1380px
+      );
   }
 
   .authCard {
-    padding: 18px 16px 20px;
+    padding:
+      18px
+      16px
+      20px;
+
     border-radius: 18px;
   }
 
   .authTabs {
     gap: 8px;
+
     padding: 6px;
   }
 
   .authTab {
     min-height: 44px;
+
     font-size: 14px;
   }
 
@@ -494,32 +1083,229 @@
 
   .formGroup input {
     height: 46px;
+
     font-size: 13px;
   }
 
   .primaryButton,
   .secondaryButton {
     min-height: 48px;
+
     font-size: 14px;
   }
 
+
+  /* =====================================================
+     VISUAL PHONE
+  ===================================================== */
+
   .authVisual {
-    min-height: 560px;
+    min-height: 650px;
+
+    border-radius: 20px;
   }
 
-  .visualTitle {
-    font-size: 32px;
+
+  /* ==============================
+     IMAGE PHONE
+
+     มือถือ:
+     กลับมาอยู่กลางมากขึ้น
+     ไม่ชิดบน
+  ============================== */
+
+  .visualProducts img {
+    object-position:
+      center 47%;
+
+    transform:
+      translate(
+        -1%,
+        2%
+      )
+      scale(1.01);
   }
 
-  .visualDescription {
-    font-size: 15px;
-  }
 
-  .visualProducts {
-    height: 220px;
+  .visualOverlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(
+          4,
+          31,
+          70,
+          0.96
+        ) 0%,
+
+        rgba(
+          5,
+          39,
+          85,
+          0.90
+        ) 44%,
+
+        rgba(
+          5,
+          39,
+          85,
+          0.54
+        ) 72%,
+
+        rgba(
+          5,
+          39,
+          85,
+          0.28
+        ) 100%
+      );
   }
 
   .visualContent {
-    padding: 28px 18px 180px;
+    max-width: none;
+
+    padding:
+      28px
+      18px
+      26px;
   }
+
+  .visualBadge {
+    min-height: 30px;
+
+    font-size: 10px;
+  }
+
+  .visualTitle {
+    margin:
+      18px
+      0
+      14px;
+
+    font-size: 34px;
+
+    line-height: 1.08;
+  }
+
+  .visualDescription {
+    max-width: 360px;
+
+    font-size: 15px;
+
+    line-height: 1.65;
+  }
+
+  .visualFeatures {
+    max-width: 100%;
+
+    margin-top: 24px;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+  }
+
+  .visualFeature {
+    min-height: 105px;
+
+    padding:
+      12px
+      9px;
+
+    border-radius: 14px;
+  }
+
+  .featureIcon {
+    width: 36px;
+    height: 36px;
+
+    margin-bottom: 9px;
+
+    font-size: 14px;
+  }
+
+  .visualFeature strong {
+    font-size: 12px;
+  }
+
+  .visualFeature span {
+    font-size: 9px;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .container {
+    width:
+      calc(
+        100% - 18px
+      );
+  }
+
+  .authVisual {
+    min-height: 630px;
+  }
+
+  .visualTitle {
+    font-size: 30px;
+  }
+
+  .visualDescription {
+    font-size: 14px;
+  }
+
+  .visualContent {
+    padding:
+      24px
+      15px
+      22px;
+  }
+
+  .visualFeatures {
+    gap: 5px;
+  }
+
+  .visualFeature {
+    min-height: 102px;
+
+    padding:
+      11px
+      7px;
+  }
+
+  .visualFeature strong {
+    font-size: 11px;
+  }
+
+  .visualFeature span {
+    font-size: 8px;
+  }
+
+
+  /* ==============================
+     IMAGE SMALL PHONE
+  ============================== */
+
+  .visualProducts img {
+    object-position:
+      center 48%;
+
+    transform:
+      translate(
+        -0.5%,
+        2%
+      )
+      scale(1.01);
+  }
+
 }

@@ -91,9 +91,6 @@ export default function LoginPage() {
 
   /* =====================================================
      AUTH NAVIGATION
-
-     ใช้ window.location.href
-     เพื่อให้โหลด tab ใหม่แน่นอน
   ===================================================== */
 
   function goToLogin() {
@@ -463,7 +460,6 @@ export default function LoginPage() {
         styles.loginPage
       }
     >
-
       {/* =================================================
           HEADER
       ================================================= */}
@@ -508,11 +504,30 @@ export default function LoginPage() {
                 styles.authVisual
               }
             >
+
+              {/* PRODUCT IMAGE */}
+
+              <div
+                className={
+                  styles.visualProducts
+                }
+                aria-hidden="true"
+              >
+                <img
+                  src="/logo/login-industrial-products.png"
+                  alt=""
+                />
+              </div>
+
+              {/* DARK OVERLAY */}
+
               <div
                 className={
                   styles.visualOverlay
                 }
               />
+
+              {/* CONTENT */}
 
               <div
                 className={
@@ -542,12 +557,11 @@ export default function LoginPage() {
                     styles.visualDescription
                   }
                 >
-                  สั่งซื้อซีล โอริง
-                  อะไหล่อุตสาหกรรม
-                  และอุปกรณ์โรงงาน
-                  ได้ง่าย สะดวก
-                  และพร้อมต่อยอด
-                  เชื่อมระบบจริงในอนาคต
+                  จำหน่าย ซีล โอริง
+                  ประเก็น อะไหล่ ปั๊ม
+                  วาล์ว ทุกชนิด
+                  สำหรับงานอุตสาหกรรม
+                  และโรงงาน
                 </p>
 
                 <div
@@ -580,7 +594,6 @@ export default function LoginPage() {
                     </div>
                   </div>
 
-
                   <div
                     className={
                       styles.visualFeature
@@ -605,7 +618,6 @@ export default function LoginPage() {
                     </div>
                   </div>
 
-
                   <div
                     className={
                       styles.visualFeature
@@ -616,44 +628,25 @@ export default function LoginPage() {
                         styles.featureIcon
                       }
                     >
-                      🔒
+                      ⚙
                     </div>
 
                     <div>
                       <strong>
-                        ปลอดภัย
+                        ครบทุกงาน
                       </strong>
 
                       <span>
-                        รองรับการต่อระบบจริง
+                        อะไหล่อุตสาหกรรม
                       </span>
                     </div>
                   </div>
 
                 </div>
 
-                <div
-                  className={
-                    styles.brandRow
-                  }
-                />
-
-              </div>
-
-
-              <div
-                className={
-                  styles.visualProducts
-                }
-              >
-                <img
-                  src="/logo/hero-products.png"
-                  alt="SRR AND SUPPLY PRODUCTS"
-                />
               </div>
 
             </div>
-
 
             {/* =========================================
                 RIGHT AUTH CARD
@@ -664,7 +657,6 @@ export default function LoginPage() {
                 styles.authPanel
               }
             >
-
               <div
                 className={
                   styles.authCard
@@ -681,10 +673,6 @@ export default function LoginPage() {
                   }
                 >
 
-                  {/* ================================
-                      LOGIN TAB
-                  ================================ */}
-
                   <button
                     type="button"
                     className={`${styles.authTab} ${
@@ -699,11 +687,6 @@ export default function LoginPage() {
                   >
                     เข้าสู่ระบบ
                   </button>
-
-
-                  {/* ================================
-                      REGISTER TAB
-                  ================================ */}
 
                   <button
                     type="button"
@@ -721,7 +704,6 @@ export default function LoginPage() {
                   </button>
 
                 </div>
-
 
                 {/* =====================================
                     LOGIN FORM
@@ -752,7 +734,6 @@ export default function LoginPage() {
                         เข้าสู่ระบบเพื่อจัดการคำสั่งซื้อและข้อมูลของคุณ
                       </p>
                     </div>
-
 
                     <div
                       className={
@@ -788,7 +769,6 @@ export default function LoginPage() {
                       />
                     </div>
 
-
                     <div
                       className={
                         styles.formGroup
@@ -822,7 +802,6 @@ export default function LoginPage() {
                         placeholder="กรอกรหัสผ่าน"
                       />
                     </div>
-
 
                     <div
                       className={
@@ -863,7 +842,6 @@ export default function LoginPage() {
                         </span>
                       </label>
 
-
                       <button
                         type="button"
                         className={
@@ -875,7 +853,6 @@ export default function LoginPage() {
 
                     </div>
 
-
                     <button
                       type="submit"
                       className={
@@ -884,7 +861,6 @@ export default function LoginPage() {
                     >
                       เข้าสู่ระบบ
                     </button>
-
 
                     <div
                       className={
@@ -895,14 +871,6 @@ export default function LoginPage() {
                         หรือ
                       </span>
                     </div>
-
-
-                    {/* =================================
-                        สมัครสมาชิกใหม่
-
-                        กดแล้วโหลด
-                        /login?tab=register
-                    ================================= */}
 
                     <button
                       type="button"
@@ -947,7 +915,6 @@ export default function LoginPage() {
                       </p>
                     </div>
 
-
                     <div
                       className={
                         styles.formGroup
@@ -981,7 +948,6 @@ export default function LoginPage() {
                         placeholder="กรอกชื่อ-นามสกุล"
                       />
                     </div>
-
 
                     <div
                       className={
@@ -1017,7 +983,6 @@ export default function LoginPage() {
                       />
                     </div>
 
-
                     <div
                       className={
                         styles.formGroup
@@ -1051,7 +1016,6 @@ export default function LoginPage() {
                         placeholder="081-234-5678"
                       />
                     </div>
-
 
                     <div
                       className={
@@ -1087,7 +1051,6 @@ export default function LoginPage() {
                       />
                     </div>
 
-
                     <div
                       className={
                         styles.formGroup
@@ -1122,7 +1085,6 @@ export default function LoginPage() {
                       />
                     </div>
 
-
                     <button
                       type="submit"
                       className={
@@ -1132,21 +1094,14 @@ export default function LoginPage() {
                       สมัครสมาชิก
                     </button>
 
-
                     <div
                       className={
                         styles.registerFooter
                       }
                     >
-
                       <span>
                         มีบัญชีอยู่แล้ว?
                       </span>
-
-
-                      {/* =============================
-                          กลับเข้าสู่ระบบ
-                      ============================= */}
 
                       <button
                         type="button"
@@ -1159,7 +1114,6 @@ export default function LoginPage() {
                       >
                         เข้าสู่ระบบ
                       </button>
-
                     </div>
 
                   </form>
@@ -1172,7 +1126,6 @@ export default function LoginPage() {
           </section>
         </div>
       </main>
-
 
       {/* =================================================
           CART DRAWER

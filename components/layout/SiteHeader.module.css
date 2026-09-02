@@ -297,6 +297,8 @@
 
   font-family: inherit;
 
+  text-decoration: none;
+
   cursor: pointer;
 }
 
@@ -346,15 +348,34 @@
 
 
 /* =========================================================
+   NAVIGATION SHELL
+========================================================= */
+
+.navigationShell {
+  position: relative;
+
+  z-index: 100;
+}
+
+
+/* =========================================================
    NAVIGATION
 ========================================================= */
 
 .navigation {
+  position: relative;
+
+  z-index: 102;
+
   width: 100%;
 
   background: #0758ad;
 
   color: #ffffff;
+
+  box-shadow:
+    0 2px 5px
+    rgba(8, 53, 103, 0.06);
 }
 
 .navigationInner {
@@ -364,7 +385,8 @@
   align-items: center;
 }
 
-.navigationInner a {
+.navigationInner > a,
+.navigationInner > button {
   height: 48px;
 
   padding:
@@ -375,7 +397,13 @@
   align-items: center;
   justify-content: center;
 
+  border: 0;
+
+  background: transparent;
+
   color: #ffffff;
+
+  font-family: inherit;
 
   font-size: 13px;
 
@@ -384,9 +412,12 @@
   text-decoration: none;
 
   white-space: nowrap;
+
+  cursor: pointer;
 }
 
-.navigationInner a:hover {
+.navigationInner > a:hover,
+.navigationInner > button:hover {
   background: #064b94;
 }
 
@@ -401,11 +432,23 @@
   padding-left:
     20px !important;
 
-  background: #064b94;
+  background:
+    #064b94 !important;
 }
 
 .navAll {
   margin-left: auto;
+
+  gap: 7px;
+}
+
+.navAllOpen {
+  background:
+    #064b94 !important;
+
+  box-shadow:
+    inset 0 -3px 0
+    #89c8ff;
 }
 
 .navContact {
@@ -414,14 +457,764 @@
   margin-left: 12px;
 
   border:
-    1px solid #ffffff;
+    1px solid #ffffff !important;
 
   border-radius: 5px;
 }
 
 
 /* =========================================================
-   1250
+   MEGA MENU BACKGROUND
+========================================================= */
+
+.megaMenu {
+  position: absolute;
+
+  top: 100%;
+  left: 0;
+  right: 0;
+
+  z-index: 101;
+
+  padding:
+    12px
+    0
+    22px;
+
+  background:
+    rgba(
+      239,
+      246,
+      253,
+      0.98
+    );
+
+  border-bottom:
+    1px solid #d5e2ef;
+
+  box-shadow:
+    0 22px 42px
+    rgba(12, 47, 84, 0.2);
+}
+
+
+/* =========================================================
+   MEGA MENU CARD
+========================================================= */
+
+.megaMenuCard {
+  min-height: 525px;
+
+  display: grid;
+
+  grid-template-columns:
+    270px
+    minmax(0, 1fr);
+
+  overflow: hidden;
+
+  border:
+    1px solid #dce5ef;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px
+    rgba(26, 57, 91, 0.09);
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.megaSidebar {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0864c2 0%,
+      #06498f 100%
+    );
+
+  color: #ffffff;
+}
+
+.megaSidebarTitle {
+  min-height: 68px;
+
+  padding:
+    0
+    19px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-bottom:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.15
+    );
+
+  background:
+    rgba(
+      3,
+      52,
+      105,
+      0.24
+    );
+}
+
+.megaSidebarTitle > span {
+  font-size: 18px;
+}
+
+.megaSidebarTitle > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.megaSidebarTitle strong {
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.megaSidebarTitle small {
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.68
+    );
+
+  font-size: 9px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   LEFT TABS
+========================================================= */
+
+.megaTabs {
+  padding:
+    7px
+    0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.megaTab {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 46px;
+
+  padding:
+    0
+    16px;
+
+  display: grid;
+
+  grid-template-columns:
+    28px
+    minmax(0, 1fr)
+    16px;
+
+  align-items: center;
+
+  gap: 7px;
+
+  border: 0;
+
+  border-left:
+    4px solid transparent;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.megaTab:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
+}
+
+
+/* =========================================================
+   ACTIVE TAB
+========================================================= */
+
+.megaTabActive {
+  border-left-color:
+    #80c8ff;
+
+  background: #ffffff;
+
+  color: #075bb7;
+
+  box-shadow:
+    0 3px 10px
+    rgba(3, 47, 92, 0.1);
+}
+
+.megaTabIcon {
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
+
+  color: #cce8ff;
+
+  font-size: 16px;
+
+  font-weight: 800;
+}
+
+.megaTabActive .megaTabIcon {
+  background: #eaf4ff;
+
+  color: #075bb7;
+}
+
+.megaTabLabel {
+  min-width: 0;
+
+  overflow: hidden;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.megaTabArrow {
+  font-size: 19px;
+
+  text-align: right;
+
+  opacity: 0.85;
+}
+
+.megaTabActive .megaTabArrow {
+  color: #075bb7;
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   SIDEBAR ALL
+========================================================= */
+
+.megaSidebarAll {
+  min-height: 58px;
+
+  margin-top: auto;
+
+  padding:
+    0
+    18px;
+
+  display: grid;
+
+  grid-template-columns:
+    24px
+    minmax(0, 1fr)
+    18px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border-top:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.17
+    );
+
+  background:
+    rgba(
+      0,
+      39,
+      81,
+      0.25
+    );
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  text-decoration: none;
+}
+
+.megaSidebarAll:hover {
+  background:
+    rgba(
+      0,
+      35,
+      74,
+      0.38
+    );
+}
+
+.megaSidebarAll strong {
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   RIGHT PANEL
+========================================================= */
+
+.megaPanel {
+  min-width: 0;
+
+  padding:
+    28px
+    30px
+    25px;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+}
+
+
+/* =========================================================
+   PANEL HEADER
+========================================================= */
+
+.megaPanelHeader {
+  min-height: 78px;
+
+  padding-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 28px;
+
+  border-bottom:
+    1px solid #e8eef5;
+}
+
+.megaPanelHeading {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.megaPanelIcon {
+  width: 48px;
+  height: 48px;
+
+  flex: 0 0 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid #cde2f7;
+
+  border-radius: 10px;
+
+  background: #eaf4ff;
+
+  color: #075bb7;
+
+  font-size: 25px;
+
+  font-weight: 800;
+}
+
+.megaPanelHeading h3 {
+  margin: 0;
+
+  color: #123e70;
+
+  font-size: 20px;
+
+  line-height: 1.25;
+}
+
+.megaPanelHeading p {
+  max-width: 700px;
+
+  margin:
+    5px
+    0
+    0;
+
+  color: #788b9f;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.megaPanelAllButton {
+  min-height: 38px;
+
+  padding:
+    0
+    16px;
+
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+
+  border:
+    1px solid #bdd9f4;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: #075bb7;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-decoration: none;
+}
+
+.megaPanelAllButton:hover {
+  border-color: #075bb7;
+
+  background: #f3f9ff;
+}
+
+
+/* =========================================================
+   ITEM GRID
+========================================================= */
+
+.megaItemGrid {
+  margin-top: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 12px;
+}
+
+
+/* =========================================================
+   ITEM CARD
+========================================================= */
+
+.megaItemCard {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 94px;
+
+  padding:
+    15px
+    39px
+    14px
+    14px;
+
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr);
+
+  align-items: start;
+
+  gap: 11px;
+
+  border:
+    1px solid #e0e9f2;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  text-decoration: none;
+
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease,
+    background 0.16s ease;
+}
+
+.megaItemCard:hover {
+  border-color: #9cc9ef;
+
+  background: #f8fbff;
+
+  box-shadow:
+    0 7px 17px
+    rgba(
+      12,
+      75,
+      138,
+      0.08
+    );
+
+  transform:
+    translateY(-2px);
+}
+
+.megaItemNumber {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  background: #eaf4ff;
+
+  color: #075bb7;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.megaItemText {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.megaItemText strong {
+  overflow: hidden;
+
+  color: #173f6d;
+
+  font-size: 12px;
+
+  line-height: 1.35;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.megaItemText span {
+  color: #8797a8;
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+.megaItemArrow {
+  position: absolute;
+
+  top: 50%;
+  right: 14px;
+
+  color: #9eb3c7;
+
+  font-size: 14px;
+
+  transform:
+    translateY(-50%);
+}
+
+.megaItemCard:hover .megaItemArrow {
+  color: #075bb7;
+}
+
+
+/* =========================================================
+   PANEL BOTTOM
+========================================================= */
+
+.megaPanelBottom {
+  min-height: 75px;
+
+  margin-top: auto;
+
+  padding-top: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-top:
+    1px solid #edf1f5;
+}
+
+.megaPanelBenefits {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 30px;
+}
+
+.megaPanelBenefits > div {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.megaPanelBenefits > div > span {
+  width: 25px;
+  height: 25px;
+
+  flex: 0 0 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e8f4ff;
+
+  color: #075bb7;
+
+  font-size: 10px;
+
+  font-weight: 900;
+}
+
+.megaPanelBenefits > div > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.megaPanelBenefits strong {
+  color: #34577b;
+
+  font-size: 9px;
+}
+
+.megaPanelBenefits small {
+  color: #8b9aac;
+
+  font-size: 8px;
+}
+
+.megaBottomButton {
+  min-height: 40px;
+
+  padding:
+    0
+    18px;
+
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  border-radius: 5px;
+
+  background: #075bb7;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-decoration: none;
+}
+
+.megaBottomButton:hover {
+  background: #064b94;
+}
+
+
+/* =========================================================
+   RESPONSIVE 1250
 ========================================================= */
 
 @media (max-width: 1250px) {
@@ -453,7 +1246,8 @@
     gap: 12px;
   }
 
-  .navigationInner a {
+  .navigationInner > a,
+  .navigationInner > button {
     padding:
       0
       11px;
@@ -465,11 +1259,25 @@
     min-width: 220px;
   }
 
+  .megaMenuCard {
+    grid-template-columns:
+      235px
+      minmax(0, 1fr);
+  }
+
+  .megaItemGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
 }
 
 
 /* =========================================================
-   1050
+   RESPONSIVE 1050
 ========================================================= */
 
 @media (max-width: 1050px) {
@@ -517,22 +1325,82 @@
       100%;
   }
 
+
+  /* =====================================================
+     TOP NAV MOBILE SCROLL
+  ===================================================== */
+
   .navigationInner {
     overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling: touch;
   }
 
-  .navigationInner a {
+  .navigationInner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navigationInner > a,
+  .navigationInner > button {
     flex:
       0
       0
       auto;
   }
 
+  .navAll {
+    margin-left: 0;
+  }
+
+
+  /* =====================================================
+     MEGA MENU TABLET
+  ===================================================== */
+
+  .megaMenu {
+    max-height:
+      calc(
+        100vh - 150px
+      );
+
+    max-height:
+      calc(
+        100dvh - 150px
+      );
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .megaMenuCard {
+    grid-template-columns:
+      210px
+      minmax(0, 1fr);
+  }
+
+  .megaPanel {
+    padding:
+      22px
+      20px;
+  }
+
+  .megaPanelBenefits {
+    gap: 15px;
+  }
+
 }
 
 
 /* =========================================================
-   800
+   RESPONSIVE 800
+   TABLET / MOBILE
 ========================================================= */
 
 @media (max-width: 800px) {
@@ -566,11 +1434,262 @@
     font-size: 18px;
   }
 
+
+  /* =====================================================
+     MEGA MENU MOBILE
+  ===================================================== */
+
+  .megaMenu {
+    padding:
+      8px
+      0
+      16px;
+
+    max-height:
+      calc(
+        100vh - 130px
+      );
+
+    max-height:
+      calc(
+        100dvh - 130px
+      );
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* =====================================================
+     CARD
+  ===================================================== */
+
+  .megaMenuCard {
+    display: block;
+
+    min-height: 0;
+
+    max-height: none;
+
+    overflow: visible;
+
+    border-radius: 8px;
+  }
+
+
+  /* =====================================================
+     MOBILE SIDEBAR
+  ===================================================== */
+
+  .megaSidebar {
+    display: block;
+
+    width: 100%;
+  }
+
+  .megaSidebarTitle {
+    min-height: 54px;
+
+    padding:
+      0
+      15px;
+  }
+
+
+  /* =====================================================
+     MOBILE CATEGORY TABS
+  ===================================================== */
+
+  .megaTabs {
+    width: 100%;
+
+    padding:
+      7px
+      8px
+      9px;
+
+    display: flex;
+    flex-direction: row;
+
+    gap: 6px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type:
+      x proximity;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .megaTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  /* =====================================================
+     MOBILE TAB
+  ===================================================== */
+
+  .megaTab {
+    width: auto;
+
+    min-width: 175px;
+    min-height: 44px;
+
+    flex:
+      0
+      0
+      175px;
+
+    padding:
+      0
+      12px;
+
+    grid-template-columns:
+      28px
+      minmax(0, 1fr)
+      14px;
+
+    border-left: 0;
+
+    border-bottom:
+      3px solid transparent;
+
+    border-radius: 6px;
+
+    scroll-snap-align: start;
+  }
+
+  .megaTabActive {
+    border-left: 0;
+
+    border-bottom-color:
+      #80c8ff;
+
+    background: #ffffff;
+
+    color: #075bb7;
+
+    box-shadow: none;
+  }
+
+  .megaTabLabel {
+    font-size: 11px;
+  }
+
+  .megaTabArrow {
+    font-size: 17px;
+  }
+
+
+  /* =====================================================
+     ALL PRODUCTS
+  ===================================================== */
+
+  .megaSidebarAll {
+    min-height: 46px;
+
+    margin-top: 0;
+
+    padding:
+      0
+      15px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+  }
+
+  .megaSidebarAll > span:last-child {
+    margin-left: auto;
+  }
+
+
+  /* =====================================================
+     RIGHT PANEL
+  ===================================================== */
+
+  .megaPanel {
+    min-height: 0;
+
+    padding:
+      20px
+      18px
+      18px;
+  }
+
+  .megaPanelHeader {
+    min-height: 0;
+
+    align-items: flex-start;
+
+    gap: 16px;
+  }
+
+  .megaPanelHeading {
+    align-items: flex-start;
+  }
+
+  .megaPanelHeading p {
+    max-width: 100%;
+  }
+
+
+  /* =====================================================
+     ITEM GRID TABLET
+  ===================================================== */
+
+  .megaItemGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 10px;
+  }
+
+  .megaItemCard {
+    min-height: 88px;
+  }
+
+
+  /* =====================================================
+     PANEL BOTTOM
+  ===================================================== */
+
+  .megaPanelBottom {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 14px;
+  }
+
+  .megaPanelBenefits {
+    width: 100%;
+
+    flex-wrap: wrap;
+
+    gap:
+      12px
+      18px;
+  }
+
 }
 
 
 /* =========================================================
-   620
+   RESPONSIVE 620
+   PHONE
 ========================================================= */
 
 @media (max-width: 620px) {
@@ -588,6 +1707,11 @@
   .headerInner {
     gap: 10px;
   }
+
+
+  /* =====================================================
+     LOGO
+  ===================================================== */
 
   .logoMark,
   .logoMark img {
@@ -607,6 +1731,11 @@
   .logoText span {
     font-size: 8px;
   }
+
+
+  /* =====================================================
+     HEADER ACTIONS
+  ===================================================== */
 
   .headerActions {
     gap: 4px;
@@ -635,8 +1764,257 @@
     flex-basis: 28px;
   }
 
+
+  /* =====================================================
+     SEARCH
+  ===================================================== */
+
   .headerSearch {
     height: 43px;
+  }
+
+
+  /* =====================================================
+     MOBILE MENU
+  ===================================================== */
+
+  .megaMenu {
+    max-height:
+      calc(
+        100vh - 118px
+      );
+
+    max-height:
+      calc(
+        100dvh - 118px
+      );
+
+    padding:
+      7px
+      0
+      14px;
+  }
+
+
+  /* =====================================================
+     MOBILE CATEGORY TABS
+  ===================================================== */
+
+  .megaTabs {
+    display: flex;
+    flex-direction: row;
+
+    padding:
+      7px
+      7px
+      8px;
+
+    gap: 6px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type:
+      x proximity;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .megaTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  /* =====================================================
+     PHONE TAB
+  ===================================================== */
+
+  .megaTab {
+    min-width: 158px;
+
+    flex:
+      0
+      0
+      158px;
+
+    min-height: 42px;
+
+    padding:
+      0
+      10px;
+  }
+
+  .megaTabIcon {
+    width: 25px;
+    height: 25px;
+
+    font-size: 14px;
+  }
+
+  .megaTabLabel {
+    font-size: 10px;
+  }
+
+
+  /* =====================================================
+     PANEL
+  ===================================================== */
+
+  .megaPanel {
+    padding:
+      17px
+      13px
+      15px;
+  }
+
+
+  /* =====================================================
+     PANEL HEADER
+  ===================================================== */
+
+  .megaPanelHeader {
+    flex-direction: column;
+
+    gap: 13px;
+
+    padding-bottom: 16px;
+  }
+
+  .megaPanelHeading {
+    width: 100%;
+
+    gap: 11px;
+  }
+
+  .megaPanelIcon {
+    width: 42px;
+    height: 42px;
+
+    flex:
+      0
+      0
+      42px;
+
+    font-size: 21px;
+  }
+
+  .megaPanelHeading h3 {
+    font-size: 17px;
+  }
+
+  .megaPanelHeading p {
+    font-size: 10px;
+  }
+
+
+  /* =====================================================
+     VIEW ALL BUTTON
+  ===================================================== */
+
+  .megaPanelAllButton {
+    width: 100%;
+
+    min-height: 40px;
+
+    box-sizing: border-box;
+  }
+
+
+  /* =====================================================
+     ITEM GRID PHONE
+  ===================================================== */
+
+  .megaItemGrid {
+    grid-template-columns: 1fr;
+
+    margin-top: 15px;
+
+    gap: 9px;
+  }
+
+  .megaItemCard {
+    min-height: 78px;
+
+    padding:
+      12px
+      37px
+      12px
+      12px;
+  }
+
+
+  /* =====================================================
+     BENEFITS
+  ===================================================== */
+
+  .megaPanelBenefits {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+
+  /* =====================================================
+     BOTTOM BUTTON
+  ===================================================== */
+
+  .megaBottomButton {
+    width: 100%;
+
+    min-height: 42px;
+
+    box-sizing: border-box;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .container {
+    width:
+      calc(
+        100% - 18px
+      );
+  }
+
+  .logoText strong {
+    font-size: 14px;
+  }
+
+  .logoText span {
+    font-size: 7px;
+  }
+
+  .megaTab {
+    min-width: 148px;
+
+    flex:
+      0
+      0
+      148px;
+  }
+
+  .megaPanel {
+    padding:
+      15px
+      11px;
+  }
+
+  .megaPanelHeading h3 {
+    font-size: 16px;
+  }
+
+  .megaItemCard {
+    min-height: 75px;
   }
 
 }
