@@ -346,6 +346,75 @@
   font-size: 10px;
 }
 
+.accountStatus {
+  cursor: default;
+}
+
+.accountStatus:hover {
+  opacity: 1;
+}
+
+.authChecking {
+  opacity: 0.65;
+}
+
+.loggedInIcon {
+  border-radius: 50%;
+
+  background: #eaf5ff;
+}
+
+.userText {
+  max-width: 150px;
+}
+
+.userName {
+  max-width: 150px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.loggedInLabel {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.onlineDot {
+  width: 6px;
+  height: 6px;
+
+  flex: 0 0 6px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+
+  background: #22a06b;
+}
+
+.logoutButton:disabled {
+  opacity: 0.5;
+
+  cursor: wait;
+}
+
+.logoutButton:not(:disabled):hover {
+  color: #b42318;
+}
+
+.logoutButton:not(:disabled):hover
+.actionIcon,
+.logoutButton:not(:disabled):hover
+strong {
+  color: #b42318;
+}
+
 
 /* =========================================================
    NAVIGATION SHELL

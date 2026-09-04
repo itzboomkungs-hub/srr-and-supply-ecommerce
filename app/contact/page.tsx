@@ -313,7 +313,7 @@ export default function ContactPage() {
                     <div className={styles.chatBubbleLight}>
                       สวัสดีครับ สนใจสินค้า
                       <br />
-                      รุ่นนี้ค่ะ
+                      รุ่นนี้ครับ
                     </div>
                   </div>
 

@@ -1,90 +1,55 @@
-"use client";
+﻿"use client";
+
 
 import Link from "next/link";
 import {
   useEffect,
   useState,
+  type KeyboardEvent,
 } from "react";
 
+
 import styles from "./HomePage.module.css";
+
 
 import SiteHeader from "../../components/layout/SiteHeader";
 import CartDrawer from "../../components/cart/CartDrawer";
 import ProductQuickView from "../../components/product/ProductQuickView";
 
-import type {
-  CartItem,
-} from "../../components/cart/types";
 
-import type {
-  ProductQuickViewData,
-} from "../../components/product/types";
+import type { CartItem } from "../../components/cart/types";
+import type { ProductQuickViewData } from "../../components/product/types";
 
-const CART_KEY =
-  "srr-demo-cart";
 
-/* =====================================================
-   PRODUCT TYPE
-===================================================== */
+import { normalizeApiProduct } from "../../lib/products/product-normalize.mjs";
 
-type Product =
-  ProductQuickViewData;
 
-/* =====================================================
-   PRODUCT CATEGORIES
-===================================================== */
+const CART_KEY = "srr-demo-cart";
+
+
+type Product = ProductQuickViewData;
+
+
+type SrrHomeCategory = {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  productCount?: number;
+};
 
 const categories = [
-  {
-    name: "O-Ring",
-    thai: "โอริง",
-    icon: "◎",
-  },
-  {
-    name: "Oil Seal",
-    thai: "ซีลน้ำมัน",
-    icon: "◉",
-  },
-  {
-    name: "Hydraulic Seal",
-    thai: "ซีลไฮดรอลิค",
-    icon: "◌",
-  },
-  {
-    name: "Pneumatic Seal",
-    thai: "ซีลกระบอกลม",
-    icon: "◍",
-  },
-  {
-    name: "Rotary Seal",
-    thai: "ซีลเพลาหมุน",
-    icon: "◈",
-  },
-  {
-    name: "Gasket",
-    thai: "ประเก็น",
-    icon: "◇",
-  },
-  {
-    name: "Pump Parts",
-    thai: "อะไหล่ปั๊ม",
-    icon: "⚙",
-  },
-  {
-    name: "Valve",
-    thai: "วาล์ว",
-    icon: "▣",
-  },
-  {
-    name: "Industrial Parts",
-    thai: "อะไหล่อุตสาหกรรม",
-    icon: "⌘",
-  },
+  { name: "O-Ring", thai: "โอริง", icon: "◎" },
+  { name: "Oil Seal", thai: "ซีลน้ำมัน", icon: "◉" },
+  { name: "Hydraulic Seal", thai: "ซีลไฮดรอลิค", icon: "◌" },
+  { name: "Pneumatic Seal", thai: "ซีลกระบอกลม", icon: "◍" },
+  { name: "Rotary Seal", thai: "ซีลเพลาหมุน", icon: "◈" },
+  { name: "Gasket", thai: "ประเก็น", icon: "◇" },
+  { name: "Pump Parts", thai: "อะไหล่ปั๊ม", icon: "⚙" },
+  { name: "Valve", thai: "วาล์ว", icon: "▣" },
+  { name: "Industrial Parts", thai: "อะไหล่อุตสาหกรรม", icon: "⌘" },
 ];
 
-/* =====================================================
-   SIDEBAR
-===================================================== */
 
 const sideCategories = [
   "O-Ring",
@@ -101,102 +66,21 @@ const sideCategories = [
   "อุปกรณ์อื่นๆ",
 ];
 
-/* =====================================================
-   BEST SELLERS
-===================================================== */
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: "O-Ring NBR M70",
-    code: "OR-NBR-M70",
-    category: "O-Ring",
-    material: "NBR",
-    price: 35,
-    stock: 820,
-  },
-
-  {
-    id: 2,
-    name: "O-Ring NBR M60",
-    code: "OR-NBR-M60",
-    category: "O-Ring",
-    material: "NBR",
-    price: 30,
-    stock: 650,
-  },
-
-  {
-    id: 3,
-    name: "O-Ring EPDM M50",
-    code: "OR-EPDM-M50",
-    category: "O-Ring",
-    material: "EPDM",
-    price: 42,
-    stock: 540,
-  },
-
-  {
-    id: 4,
-    name: "O-Ring Viton M40",
-    code: "OR-VITON-M40",
-    category: "O-Ring",
-    material: "Viton",
-    price: 65,
-    stock: 42,
-  },
-
-  {
-    id: 5,
-    name: "O-Ring Silicone M30",
-    code: "OR-SIL-M30",
-    category: "O-Ring",
-    material: "Silicone",
-    price: 55,
-    stock: 0,
-  },
-
-  {
-    id: 6,
-    name: "O-Ring NBR M50",
-    code: "OR-NBR-M50",
-    category: "O-Ring",
-    material: "NBR",
-    price: 32,
-    stock: 280,
-  },
-];
-
-/* =====================================================
-   STOCK STATUS
-===================================================== */
-
-function getStockStatus(
-  stock: number
-) {
+function getStockStatus(stock: number) {
   if (stock === 0) {
-    return {
-      label: "หมดสต็อก",
-      type: "danger",
-    };
+    return { label: "หมดสต็อก", type: "danger" };
   }
+
 
   if (stock <= 50) {
-    return {
-      label: "ใกล้หมด",
-      type: "warning",
-    };
+    return { label: "ใกล้หมด", type: "warning" };
   }
 
-  return {
-    label: "พร้อมขาย",
-    type: "success",
-  };
+
+  return { label: "พร้อมขาย", type: "success" };
 }
 
-/* =====================================================
-   HOME ICONS
-===================================================== */
 
 function TruckIcon() {
   return (
@@ -212,6 +96,7 @@ function TruckIcon() {
   );
 }
 
+
 function HeadsetIcon() {
   return (
     <svg
@@ -225,6 +110,7 @@ function HeadsetIcon() {
     </svg>
   );
 }
+
 
 function ViewIcon() {
   return (
@@ -242,7 +128,6 @@ function ViewIcon() {
         stroke="currentColor"
         strokeWidth="1.8"
       />
-
       <path
         d="M16 16L21 21"
         stroke="currentColor"
@@ -253,566 +138,388 @@ function ViewIcon() {
   );
 }
 
-/* =====================================================
-   PAGE
-===================================================== */
+
+const productStateStyle = {
+  gridColumn: "1 / -1",
+  minHeight: "180px",
+  display: "flex",
+  flexDirection: "column" as const,
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "7px",
+  padding: "28px",
+  border: "1px solid #e1e7ef",
+  borderRadius: "8px",
+  background: "#ffffff",
+  color: "#73869a",
+  textAlign: "center" as const,
+};
+
 
 export default function HomePage() {
-  /* =====================================================
-     PRODUCT
-  ===================================================== */
+  const [srrHomeCategoryRows, setSrrHomeCategoryRows] =
+    useState<SrrHomeCategory[]>([]);
 
-  const [
-    selectedProductId,
-    setSelectedProductId,
-  ] =
-    useState<
-      number | null
-    >(null);
+  useEffect(() => {
+    let cancelled = false;
 
-  const [
-    quickViewProduct,
-    setQuickViewProduct,
-  ] =
-    useState<
-      ProductQuickViewData | null
-    >(null);
+    async function loadSrrHomeCategories() {
+      try {
+        const response = await fetch("/api/product-categories", {
+          cache: "no-store",
+        });
+        const data = await response.json();
 
-  const [
-    favoriteIds,
-    setFavoriteIds,
-  ] =
-    useState<
-      number[]
-    >([]);
+        if (!response.ok || !data?.ok || !Array.isArray(data?.categories)) {
+          throw new Error(data?.message || "โหลดหมวดหมู่ไม่สำเร็จ");
+        }
 
-  /* =====================================================
-     CART
-  ===================================================== */
+        if (!cancelled) {
+          setSrrHomeCategoryRows(data.categories);
+        }
+      } catch (error) {
+        console.error("Load home SQL categories error:", error);
+        if (!cancelled) setSrrHomeCategoryRows([]);
+      }
+    }
 
-  const [
-    cartItems,
-    setCartItems,
-  ] =
-    useState<
-      CartItem[]
-    >([]);
+    void loadSrrHomeCategories();
 
-  const [
-    cartLoaded,
-    setCartLoaded,
-  ] =
-    useState(false);
+    function handleSrrProductsUpdated() {
+      void loadSrrHomeCategories();
+    }
 
-  const [
-    isCartOpen,
-    setIsCartOpen,
-  ] =
-    useState(false);
+    window.addEventListener("srr-products-updated", handleSrrProductsUpdated);
 
-  /* =====================================================
-     LOAD CART
-  ===================================================== */
+    return () => {
+      cancelled = true;
+      window.removeEventListener("srr-products-updated", handleSrrProductsUpdated);
+    };
+  }, []);
+
+  const srrHomeCategoryCards = srrHomeCategoryRows.map((item) => ({
+    id: item.id,
+    name: item.name,
+    thai: item.description || "หมวดหมู่สินค้า",
+    icon: "▦",
+  }));
+
+  const srrHomeSideCategories = srrHomeCategoryRows.map((item) => item.name);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
+
+
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [quickViewProduct, setQuickViewProduct] =
+    useState<ProductQuickViewData | null>(null);
+  const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
+
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartLoaded, setCartLoaded] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+
+  useEffect(() => {
+    let cancelled = false;
+
+
+    async function loadProducts() {
+      setProductsLoading(true);
+      setProductsError("");
+
+
+      try {
+        const response = await fetch("/api/products", {
+          cache: "no-store",
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data?.ok || !Array.isArray(data?.products)) {
+          throw new Error(data?.message || "โหลดสินค้าไม่สำเร็จ");
+        }
+
+
+        const normalized = data.products
+          .map((item: unknown) => normalizeApiProduct(item) as Product)
+          .slice(0, 6);
+
+
+        if (!cancelled) {
+          setProducts(normalized);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setProducts([]);
+          setProductsError(
+            error instanceof Error ? error.message : "โหลดสินค้าไม่สำเร็จ"
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setProductsLoading(false);
+        }
+      }
+    }
+
+
+    void loadProducts();
+
+
+    function handleProductsUpdated() {
+      void loadProducts();
+    }
+
+
+    window.addEventListener("srr-products-updated", handleProductsUpdated);
+
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("srr-products-updated", handleProductsUpdated);
+    };
+  }, []);
+
 
   useEffect(() => {
     try {
-      const saved =
-        window.localStorage.getItem(
-          CART_KEY
-        );
+      const saved = window.localStorage.getItem(CART_KEY);
+
 
       if (saved) {
-        const parsed =
-          JSON.parse(
-            saved
-          );
+        const parsed = JSON.parse(saved);
 
-        if (
-          Array.isArray(
-            parsed
-          )
-        ) {
-          setCartItems(
-            parsed
-          );
+
+        if (Array.isArray(parsed)) {
+          setCartItems(parsed);
         }
       }
     } catch (error) {
-      console.error(
-        "Load cart error:",
-        error
-      );
+      console.error("Load cart error:", error);
     } finally {
-      setCartLoaded(
-        true
-      );
+      setCartLoaded(true);
     }
   }, []);
 
-  /* =====================================================
-     SAVE CART
-  ===================================================== */
 
   useEffect(() => {
     if (!cartLoaded) {
       return;
     }
 
-    window.localStorage.setItem(
-      CART_KEY,
-      JSON.stringify(
-        cartItems
-      )
-    );
 
-    window.dispatchEvent(
-      new Event(
-        "srr-cart-updated"
-      )
-    );
-  }, [
-    cartItems,
-    cartLoaded,
-  ]);
+    window.localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+    window.dispatchEvent(new Event("srr-cart-updated"));
+  }, [cartItems, cartLoaded]);
 
-  /* =====================================================
-     CART COUNT
-  ===================================================== */
 
-  const cartCount =
-    cartItems.reduce(
-      (
-        total,
-        item
-      ) =>
-        total +
-        item.quantity,
-      0
-    );
+  const cartCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
-  /* =====================================================
-     FAVORITE
-  ===================================================== */
 
-  function toggleFavorite(
-    productId: number
-  ) {
-    setFavoriteIds(
-      (current) => {
-        if (
-          current.includes(
-            productId
-          )
-        ) {
-          return current.filter(
-            (id) =>
-              id !==
-              productId
-          );
-        }
-
-        return [
-          ...current,
-          productId,
-        ];
+  function toggleFavorite(productId: number) {
+    setFavoriteIds((current) => {
+      if (current.includes(productId)) {
+        return current.filter((id) => id !== productId);
       }
-    );
+
+
+      return [...current, productId];
+    });
   }
 
-  /* =====================================================
-     ADD TO CART
-  ===================================================== */
 
-  function addToCart(
-    product: ProductQuickViewData,
-    quantityToAdd = 1
-  ) {
-    if (
-      product.stock <= 0
-    ) {
+  function addToCart(product: ProductQuickViewData, quantityToAdd = 1) {
+    if (product.stock <= 0) {
       return;
     }
 
-    const safeQuantity =
-      Math.max(
-        1,
-        Math.min(
-          quantityToAdd,
-          product.stock
-        )
+
+    const safeQuantity = Math.max(
+      1,
+      Math.min(quantityToAdd, product.stock)
+    );
+
+
+    setCartItems((current) => {
+      const existing = current.find(
+        (item) => item.product.id === product.id
       );
 
-    setCartItems(
-      (current) => {
-        const existing =
-          current.find(
-            (item) =>
-              item.product.id ===
-              product.id
-          );
 
-        if (existing) {
-          return current.map(
-            (item) => {
-              if (
-                item.product.id !==
-                product.id
-              ) {
-                return item;
-              }
+      if (existing) {
+        return current.map((item) => {
+          if (item.product.id !== product.id) {
+            return item;
+          }
 
-              return {
-                ...item,
 
-                quantity:
-                  Math.min(
-                    item.quantity +
-                      safeQuantity,
-                    product.stock
-                  ),
-              };
-            }
-          );
+          return {
+            ...item,
+            product: {
+              ...item.product,
+              name: product.name,
+              code: product.code,
+              category: product.category,
+              material: product.material,
+              price: product.price,
+              stock: product.stock,
+            },
+            quantity: Math.min(
+              item.quantity + safeQuantity,
+              product.stock
+            ),
+          };
+        });
+      }
+
+
+      return [
+        ...current,
+        {
+          product: {
+            id: product.id,
+            name: product.name,
+            code: product.code,
+            category: product.category,
+            material: product.material,
+            price: product.price,
+            stock: product.stock,
+          },
+          quantity: safeQuantity,
+        },
+      ];
+    });
+
+
+    setSelectedProductId(product.id);
+    setIsCartOpen(true);
+  }
+
+
+  function increaseCartItem(productId: number) {
+    setCartItems((current) =>
+      current.map((item) => {
+        if (item.product.id !== productId) {
+          return item;
         }
 
+
+        return {
+          ...item,
+          quantity: Math.min(
+            item.quantity + 1,
+            item.product.stock
+          ),
+        };
+      })
+    );
+  }
+
+
+  function decreaseCartItem(productId: number) {
+    setCartItems((current) =>
+      current.flatMap((item) => {
+        if (item.product.id !== productId) {
+          return [item];
+        }
+
+
+        if (item.quantity <= 1) {
+          return [];
+        }
+
+
         return [
-          ...current,
-
           {
-            product: {
-              id:
-                product.id,
-
-              name:
-                product.name,
-
-              code:
-                product.code,
-
-              category:
-                product.category,
-
-              material:
-                product.material,
-
-              price:
-                product.price,
-
-              stock:
-                product.stock,
-            },
-
-            quantity:
-              safeQuantity,
+            ...item,
+            quantity: item.quantity - 1,
           },
         ];
-      }
-    );
-
-    setSelectedProductId(
-      product.id
-    );
-
-    setIsCartOpen(
-      true
+      })
     );
   }
 
-  /* =====================================================
-     INCREASE CART
-  ===================================================== */
 
-  function increaseCartItem(
-    productId: number
-  ) {
-    setCartItems(
-      (current) =>
-        current.map(
-          (item) => {
-            if (
-              item.product.id !==
-              productId
-            ) {
-              return item;
-            }
-
-            return {
-              ...item,
-
-              quantity:
-                Math.min(
-                  item.quantity +
-                    1,
-                  item.product.stock
-                ),
-            };
-          }
-        )
+  function removeCartItem(productId: number) {
+    setCartItems((current) =>
+      current.filter((item) => item.product.id !== productId)
     );
   }
 
-  /* =====================================================
-     DECREASE CART
-  ===================================================== */
 
-  function decreaseCartItem(
-    productId: number
-  ) {
-    setCartItems(
-      (current) =>
-        current.flatMap(
-          (item) => {
-            if (
-              item.product.id !==
-              productId
-            ) {
-              return [
-                item,
-              ];
-            }
-
-            if (
-              item.quantity <=
-              1
-            ) {
-              return [];
-            }
-
-            return [
-              {
-                ...item,
-
-                quantity:
-                  item.quantity -
-                  1,
-              },
-            ];
-          }
-        )
-    );
+  function openQuickView(product: ProductQuickViewData) {
+    setSelectedProductId(product.id);
+    setQuickViewProduct(product);
   }
 
-  /* =====================================================
-     REMOVE CART
-  ===================================================== */
-
-  function removeCartItem(
-    productId: number
-  ) {
-    setCartItems(
-      (current) =>
-        current.filter(
-          (item) =>
-            item.product.id !==
-            productId
-        )
-    );
-  }
-
-  /* =====================================================
-     QUICK VIEW
-  ===================================================== */
-
-  function openQuickView(
-    product: ProductQuickViewData
-  ) {
-    setSelectedProductId(
-      product.id
-    );
-
-    setQuickViewProduct(
-      product
-    );
-  }
 
   function closeQuickView() {
-    setQuickViewProduct(
-      null
-    );
+    setQuickViewProduct(null);
   }
 
-  /* =====================================================
-     KEYBOARD QUICK VIEW
-  ===================================================== */
 
   function handleQuickViewKeyDown(
-    event:
-      React.KeyboardEvent<HTMLElement>,
-    product:
-      ProductQuickViewData
+    event: KeyboardEvent<HTMLElement>,
+    product: ProductQuickViewData
   ) {
-    if (
-      event.key === "Enter" ||
-      event.key === " "
-    ) {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-
-      openQuickView(
-        product
-      );
+      openQuickView(product);
     }
   }
 
-  /* =====================================================
-     RETURN
-  ===================================================== */
 
   return (
-    <div
-      className={
-        styles.homePage
-      }
-    >
-
-      {/* =================================================
-          HEADER
-      ================================================= */}
-
+    <div className={styles.homePage}>
       <SiteHeader
-        cartCount={
-          cartCount
-        }
-        onCartClick={() =>
-          setIsCartOpen(
-            true
-          )
-        }
+        cartCount={cartCount}
+        onCartClick={() => setIsCartOpen(true)}
       />
 
 
       <main>
-
-        {/* =================================================
-            TOP
-        ================================================= */}
-
-        <div
-          className={`${styles.container} ${styles.homeMainLayout}`}
-        >
-
-          {/* =============================================
-              SIDEBAR
-          ============================================= */}
-
-          <aside
-            className={
-              styles.categorySidebar
-            }
-          >
-
-            <div
-              className={
-                styles.sidebarTitle
-              }
-            >
-              <span>
-                ☰
-              </span>
-
+        <div className={`${styles.container} ${styles.homeMainLayout}`}>
+          <aside className={styles.categorySidebar}>
+            <div className={styles.sidebarTitle}>
+              <span>☰</span>
               หมวดหมู่สินค้า
             </div>
 
 
-            <div
-              className={
-                styles.sidebarList
-              }
-            >
-
-              {sideCategories.map(
-                (item) => (
-
-                  <Link
-                    key={
-                      item
-                    }
-                    href="/products"
-                    className={
-                      styles.sidebarItem
-                    }
-                  >
-
-                    <span
-                      className={
-                        styles.sidebarIcon
-                      }
-                    >
-                      ○
-                    </span>
-
-                    <span
-                      className={
-                        styles.sidebarLabel
-                      }
-                    >
-                      {item}
-                    </span>
-
-                    <span
-                      className={
-                        styles.sidebarArrow
-                      }
-                    >
-                      ›
-                    </span>
-
-                  </Link>
-
-                )
-              )}
-
+            <div className={styles.sidebarList}>
+              {srrHomeSideCategories.map((item) => (
+                <Link
+                  key={item}
+                  href={`/products?category=${encodeURIComponent(item)}`}
+                  className={styles.sidebarItem}
+                >
+                  <span className={styles.sidebarIcon}>○</span>
+                  <span className={styles.sidebarLabel}>{item}</span>
+                  <span className={styles.sidebarArrow}>›</span>
+                </Link>
+              ))}
             </div>
 
 
-            <Link
-              href="/products"
-              className={
-                styles.sidebarButton
-              }
-            >
+            <Link href="/products" className={styles.sidebarButton}>
               ดูสินค้าทั้งหมด
             </Link>
-
           </aside>
 
 
-          {/* =============================================
-              MAIN AREA
-          ============================================= */}
+          <div className={styles.homeMainArea}>
+            <section className={styles.hero}>
+              <div className={styles.heroContent}>
+                <div className={styles.heroLabel}>SRR AND SUPPLY</div>
 
-          <div
-            className={
-              styles.homeMainArea
-            }
-          >
-
-            {/* =========================================
-                HERO
-            ========================================= */}
-
-            <section
-              className={
-                styles.hero
-              }
-            >
-
-              {/* =======================================
-                  HERO LEFT CONTENT
-              ======================================= */}
-
-              <div
-                className={
-                  styles.heroContent
-                }
-              >
-
-                <div
-                  className={
-                    styles.heroLabel
-                  }
-                >
-                  SRR AND SUPPLY
-                </div>
 
                 <h1>
                   ซีลและอะไหล่อุตสาหกรรม
@@ -820,29 +527,15 @@ export default function HomePage() {
                   ครบทุกประเภท
                 </h1>
 
-                <p>
-                  คุณภาพสูง • ทนทาน • พร้อมส่งทั่วประเทศ
-                </p>
+
+                <p>คุณภาพสูง • ทนทาน • พร้อมส่งทั่วประเทศ</p>
 
 
-                <div
-                  className={
-                    styles.heroBenefits
-                  }
-                >
-
+                <div className={styles.heroBenefits}>
                   <div>
-                    <span>
-                      ✓
-                    </span>
-
-                    <strong>
-                      สินค้าคุณภาพ
-                    </strong>
-
-                    <small>
-                      ได้มาตรฐาน
-                    </small>
+                    <span>✓</span>
+                    <strong>สินค้าคุณภาพ</strong>
+                    <small>ได้มาตรฐาน</small>
                   </div>
 
 
@@ -850,29 +543,15 @@ export default function HomePage() {
                     <span>
                       <TruckIcon />
                     </span>
-
-                    <strong>
-                      สต็อกพร้อมส่ง
-                    </strong>
-
-                    <small>
-                      จัดส่งรวดเร็ว
-                    </small>
+                    <strong>สต็อกพร้อมส่ง</strong>
+                    <small>จัดส่งรวดเร็ว</small>
                   </div>
 
 
                   <div>
-                    <span>
-                      ฿
-                    </span>
-
-                    <strong>
-                      ราคายุติธรรม
-                    </strong>
-
-                    <small>
-                      คุ้มค่า
-                    </small>
+                    <span>฿</span>
+                    <strong>ราคายุติธรรม</strong>
+                    <small>คุ้มค่า</small>
                   </div>
 
 
@@ -880,42 +559,20 @@ export default function HomePage() {
                     <span>
                       <HeadsetIcon />
                     </span>
-
-                    <strong>
-                      บริการให้คำปรึกษา
-                    </strong>
-
-                    <small>
-                      โดยทีมงานมืออาชีพ
-                    </small>
+                    <strong>บริการให้คำปรึกษา</strong>
+                    <small>โดยทีมงานมืออาชีพ</small>
                   </div>
-
                 </div>
 
 
-                <Link
-                  href="/products"
-                  className={
-                    styles.heroButton
-                  }
-                >
+                <Link href="/products" className={styles.heroButton}>
                   เลือกซื้อสินค้าเลย
                 </Link>
-
               </div>
 
 
-              {/* =======================================
-                  HERO RIGHT IMAGE
-
-                  ไฟล์ภาพ:
-                  public/logo/hero-industrial-parts.png
-              ======================================= */}
-
               <div
-                className={
-                  styles.heroProducts
-                }
+                className={styles.heroProducts}
                 style={{
                   width: "48%",
                   height: "100%",
@@ -928,13 +585,10 @@ export default function HomePage() {
                   boxSizing: "border-box",
                 }}
               >
-
                 <img
                   src="/logo/hero-industrial-parts.png"
                   alt="ซีล โอริง ประเก็น อะไหล่ปั๊ม วาล์ว และอะไหล่อุตสาหกรรม SRR AND SUPPLY"
-                  className={
-                    styles.heroImage
-                  }
+                  className={styles.heroImage}
                   style={{
                     display: "block",
                     width: "100%",
@@ -946,540 +600,267 @@ export default function HomePage() {
                     borderRadius: "12px",
                   }}
                 />
-
               </div>
-
             </section>
 
 
-            {/* =========================================
-                CATEGORY
-            ========================================= */}
-
-            <section
-              className={
-                styles.homeSection
-              }
-            >
-
-              <div
-                className={
-                  styles.sectionHeading
-                }
-              >
-
+            <section className={styles.homeSection}>
+              <div className={styles.sectionHeading}>
                 <div>
-                  <h2>
-                    หมวดหมู่สินค้า
-                  </h2>
-
-                  <p>
-                    เลือกดูสินค้าตามประเภทที่ต้องการ
-                  </p>
+                  <h2>หมวดหมู่สินค้า</h2>
+                  <p>เลือกดูสินค้าตามประเภทที่ต้องการ</p>
                 </div>
 
-                <Link href="/products">
-                  ดูทั้งหมด →
-                </Link>
 
+                <Link href="/products">ดูทั้งหมด →</Link>
               </div>
 
 
-              <div
-                className={
-                  styles.homeCategoryGrid
-                }
-              >
-
-                {categories.map(
-                  (item) => (
-
-                    <Link
-                      href="/products"
-                      key={
-                        item.name
-                      }
-                      className={
-                        styles.homeCategoryCard
-                      }
-                    >
-
-                      <div
-                        className={
-                          styles.homeCategoryImage
-                        }
-                      >
-                        {
-                          item.icon
-                        }
-                      </div>
-
-                      <strong>
-                        {
-                          item.name
-                        }
-                      </strong>
-
-                      <span>
-                        {
-                          item.thai
-                        }
-                      </span>
-
-                    </Link>
-
-                  )
-                )}
-
+              <div className={styles.homeCategoryGrid}>
+                {srrHomeCategoryCards.map((item) => (
+                  <Link
+                    href={`/products?category=${encodeURIComponent(item.name)}`}
+                    key={item.id}
+                    className={styles.homeCategoryCard}
+                  >
+                    <div className={styles.homeCategoryImage}>
+                      {item.icon}
+                    </div>
+                    <strong>{item.name}</strong>
+                    <span>{item.thai}</span>
+                  </Link>
+                ))}
               </div>
-
             </section>
-
           </div>
-
         </div>
 
 
-        {/* =================================================
-            BENEFITS
-        ================================================= */}
-
-        <section
-          className={
-            styles.benefits
-          }
-        >
-
-          <div
-            className={`${styles.container} ${styles.benefitsGrid}`}
-          >
-
-            <div
-              className={
-                styles.benefit
-              }
-            >
-              <span>
-                ✓
-              </span>
-
+        <section className={styles.benefits}>
+          <div className={`${styles.container} ${styles.benefitsGrid}`}>
+            <div className={styles.benefit}>
+              <span>✓</span>
               <div>
-                <strong>
-                  สินค้าคุณภาพสูง
-                </strong>
-
-                <small>
-                  คัดสรรสินค้าคุณภาพได้มาตรฐาน
-                </small>
+                <strong>สินค้าคุณภาพสูง</strong>
+                <small>คัดสรรสินค้าคุณภาพได้มาตรฐาน</small>
               </div>
             </div>
 
 
-            <div
-              className={
-                styles.benefit
-              }
-            >
+            <div className={styles.benefit}>
               <span>
                 <TruckIcon />
               </span>
-
               <div>
-                <strong>
-                  สต็อกแน่น พร้อมส่ง
-                </strong>
-
-                <small>
-                  มีสินค้าครบ พร้อมจัดส่งรวดเร็ว
-                </small>
+                <strong>สต็อกแน่น พร้อมส่ง</strong>
+                <small>มีสินค้าครบ พร้อมจัดส่งรวดเร็ว</small>
               </div>
             </div>
 
 
-            <div
-              className={
-                styles.benefit
-              }
-            >
-              <span>
-                ฿
-              </span>
-
+            <div className={styles.benefit}>
+              <span>฿</span>
               <div>
-                <strong>
-                  ราคายุติธรรม
-                </strong>
-
-                <small>
-                  ราคาคุ้มค่า เหมาะกับทุกธุรกิจ
-                </small>
+                <strong>ราคายุติธรรม</strong>
+                <small>ราคาคุ้มค่า เหมาะกับทุกธุรกิจ</small>
               </div>
             </div>
 
 
-            <div
-              className={
-                styles.benefit
-              }
-            >
+            <div className={styles.benefit}>
               <span>
                 <HeadsetIcon />
               </span>
-
               <div>
-                <strong>
-                  บริการให้คำปรึกษา
-                </strong>
-
-                <small>
-                  ทีมงานพร้อมช่วยเลือกสินค้า
-                </small>
+                <strong>บริการให้คำปรึกษา</strong>
+                <small>ทีมงานพร้อมช่วยเลือกสินค้า</small>
               </div>
             </div>
 
 
-            <div
-              className={
-                styles.benefit
-              }
-            >
-              <span>
-                ✓
-              </span>
-
+            <div className={styles.benefit}>
+              <span>✓</span>
               <div>
-                <strong>
-                  รับประกันสินค้า
-                </strong>
-
-                <small>
-                  มั่นใจในคุณภาพและบริการหลังการขาย
-                </small>
+                <strong>รับประกันสินค้า</strong>
+                <small>มั่นใจในคุณภาพและบริการหลังการขาย</small>
               </div>
             </div>
-
           </div>
-
         </section>
 
 
-        {/* =================================================
-            BEST SELLERS
-        ================================================= */}
-
-        <section
-          className={
-            styles.productsSection
-          }
-        >
-
-          <div
-            className={
-              styles.container
-            }
-          >
-
-            <div
-              className={
-                styles.sectionHeading
-              }
-            >
-
+        <section className={styles.productsSection}>
+          <div className={styles.container}>
+            <div className={styles.sectionHeading}>
               <div>
-                <h2>
-                  สินค้าขายดี
-                </h2>
-
-                <p>
-                  สินค้าที่ลูกค้าเลือกซื้อบ่อย
-                </p>
+                <h2>สินค้าแนะนำ</h2>
+                <p>สินค้าล่าสุดจากระบบ SRR AND SUPPLY</p>
               </div>
 
-              <Link href="/products">
-                ดูสินค้าทั้งหมด →
-              </Link>
 
+              <Link href="/products">ดูสินค้าทั้งหมด →</Link>
             </div>
 
 
-            <div
-              className={
-                styles.productGrid
-              }
-            >
+            <div className={styles.productGrid}>
+              {productsLoading && (
+                <div style={productStateStyle}>
+                  <strong style={{ color: "#173e6d" }}>
+                    กำลังโหลดสินค้า...
+                  </strong>
+                  <span>กำลังอ่านข้อมูล</span>
+                </div>
+              )}
 
-              {products.map(
-                (product) => {
 
-                  const stockStatus =
-                    getStockStatus(
-                      product.stock
-                    );
+              {!productsLoading && productsError && (
+                <div style={productStateStyle}>
+                  <strong style={{ color: "#c84955" }}>
+                    โหลดสินค้าไม่สำเร็จ
+                  </strong>
+                  <span>{productsError}</span>
+                </div>
+              )}
 
-                  const isSelected =
-                    selectedProductId ===
-                    product.id;
 
-                  const isFavorite =
-                    favoriteIds.includes(
-                      product.id
-                    );
+              {!productsLoading && !productsError && products.length === 0 && (
+                <div style={productStateStyle}>
+                  <strong style={{ color: "#173e6d" }}>
+                    ยังไม่มีสินค้า
+                  </strong>
+                  <span>
+                    เพิ่มสินค้าจากหลังบ้าน แล้วสินค้าใหม่จะแสดงในส่วนนี้
+                  </span>
+                </div>
+              )}
+
+
+              {!productsLoading &&
+                !productsError &&
+                products.map((product) => {
+                  const stockStatus = getStockStatus(product.stock);
+                  const isSelected = selectedProductId === product.id;
+                  const isFavorite = favoriteIds.includes(product.id);
+
 
                   return (
-
                     <article
-                      key={
-                        product.id
-                      }
+                      key={product.id}
                       className={`${styles.productCard} ${
-                        isSelected
-                          ? styles.productCardSelected
-                          : ""
+                        isSelected ? styles.productCardSelected : ""
                       }`}
-                      onClick={() =>
-                        setSelectedProductId(
-                          product.id
-                        )
-                      }
+                      onClick={() => setSelectedProductId(product.id)}
                     >
-
-                      {/* =================================
-                          FAVORITE
-                      ================================= */}
-
                       <button
                         type="button"
                         className={`${styles.favoriteButton} ${
-                          isFavorite
-                            ? styles.favoriteButtonActive
-                            : ""
+                          isFavorite ? styles.favoriteButtonActive : ""
                         }`}
                         aria-label="รายการโปรด"
-                        onClick={(
-                          event
-                        ) => {
+                        onClick={(event) => {
                           event.stopPropagation();
-
-                          toggleFavorite(
-                            product.id
-                          );
+                          toggleFavorite(product.id);
                         }}
                       >
-                        {isFavorite
-                          ? "♥"
-                          : "♡"}
+                        {isFavorite ? "♥" : "♡"}
                       </button>
 
 
-                      {/* =================================
-                          PRODUCT IMAGE
-                      ================================= */}
-
                       <div
-                        className={
-                          styles.productImage
-                        }
+                        className={styles.productImage}
                         role="button"
                         tabIndex={0}
-                        onClick={(
-                          event
-                        ) => {
+                        onClick={(event) => {
                           event.stopPropagation();
-
-                          openQuickView(
-                            product
-                          );
+                          openQuickView(product);
                         }}
-                        onKeyDown={(
-                          event
-                        ) => {
+                        onKeyDown={(event) => {
                           event.stopPropagation();
-
-                          handleQuickViewKeyDown(
-                            event,
-                            product
-                          );
+                          handleQuickViewKeyDown(event, product);
                         }}
                       >
-
                         {product.image ? (
-
                           <img
-                            src={
-                              product.image
-                            }
-                            alt={
-                              product.name
-                            }
+                            src={product.image}
+                            alt={product.name}
                             style={{
-                              width:
-                                "100%",
-                              height:
-                                "100%",
-                              objectFit:
-                                "contain",
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "contain",
                             }}
                           />
-
                         ) : (
-
-                          <div
-                            className={
-                              styles.productArtwork
-                            }
-                          >
-                            <span
-                              className={
-                                styles.outerRing
-                              }
-                            />
-
-                            <span
-                              className={
-                                styles.innerRing
-                              }
-                            />
+                          <div className={styles.productArtwork}>
+                            <span className={styles.outerRing} />
+                            <span className={styles.innerRing} />
                           </div>
-
                         )}
-
                       </div>
 
 
-                      {/* =================================
-                          PRODUCT INFO
-                      ================================= */}
-
-                      <div
-                        className={
-                          styles.productInfo
-                        }
-                      >
-
-                        <span
-                          className={
-                            styles.productCategory
-                          }
-                        >
-                          {
-                            product.category
-                          }
+                      <div className={styles.productInfo}>
+                        <span className={styles.productCategory}>
+                          {product.category || "สินค้า"}
                         </span>
 
 
                         <div
-                          className={
-                            styles.productName
-                          }
+                          className={styles.productName}
                           role="button"
                           tabIndex={0}
-                          onClick={(
-                            event
-                          ) => {
+                          onClick={(event) => {
                             event.stopPropagation();
-
-                            openQuickView(
-                              product
-                            );
+                            openQuickView(product);
                           }}
-                          onKeyDown={(
-                            event
-                          ) => {
+                          onKeyDown={(event) => {
                             event.stopPropagation();
-
-                            handleQuickViewKeyDown(
-                              event,
-                              product
-                            );
+                            handleQuickViewKeyDown(event, product);
                           }}
                         >
-                          {
-                            product.name
-                          }
+                          {product.name}
                         </div>
 
 
-                        <span
-                          className={
-                            styles.productSku
-                          }
-                        >
-                          {
-                            product.code
-                          }
-                        </span>
+                        <span className={styles.productSku}>{product.code}</span>
 
 
-                        <div
-                          className={
-                            styles.productBottom
-                          }
-                        >
-
-                          <strong
-                            className={
-                              styles.productPrice
-                            }
-                          >
-                            ฿
-                            {product.price.toLocaleString()}
-                            .00
+                        <div className={styles.productBottom}>
+                          <strong className={styles.productPrice}>
+                            ฿{product.price.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
                           </strong>
 
 
                           <span
                             className={`${styles.productStock} ${
-                              product.stock ===
-                              0
+                              product.stock === 0
                                 ? styles.productStockDanger
-                                : product.stock <=
-                                    50
+                                : product.stock <= 50
                                   ? styles.productStockWarning
                                   : styles.productStockReady
                             }`}
                           >
-                            {
-                              stockStatus.label
-                            }
+                            {product.stock > 0
+                              ? `${stockStatus.label} · ${product.stock.toLocaleString()} ชิ้น`
+                              : stockStatus.label}
                           </span>
-
                         </div>
-
                       </div>
 
 
-                      {/* =================================
-                          ACTION BAR
-                      ================================= */}
-
-                      <div
-                        className={
-                          styles.cardActions
-                        }
-                      >
-
+                      <div className={styles.cardActions}>
                         <button
                           type="button"
-                          className={
-                            styles.addCartButton
-                          }
-                          disabled={
-                            product.stock ===
-                            0
-                          }
-                          onClick={(
-                            event
-                          ) => {
+                          className={styles.addCartButton}
+                          disabled={product.stock === 0}
+                          onClick={(event) => {
                             event.stopPropagation();
-
-                            addToCart(
-                              product,
-                              1
-                            );
+                            addToCart(product, 1);
                           }}
                         >
-                          {product.stock ===
-                          0
+                          {product.stock === 0
                             ? "สินค้าหมด"
                             : "หยิบใส่ตะกร้า"}
                         </button>
@@ -1487,172 +868,73 @@ export default function HomePage() {
 
                         <button
                           type="button"
-                          className={
-                            styles.iconActionButton
-                          }
+                          className={styles.iconActionButton}
                           aria-label="ดูรายละเอียด"
                           title="ดูรายละเอียด"
-                          onClick={(
-                            event
-                          ) => {
+                          onClick={(event) => {
                             event.stopPropagation();
-
-                            openQuickView(
-                              product
-                            );
+                            openQuickView(product);
                           }}
                         >
                           <ViewIcon />
                         </button>
-
                       </div>
-
                     </article>
-
                   );
-                }
-              )}
-
+                })}
             </div>
-
           </div>
-
         </section>
 
 
-        {/* =================================================
-            CONTACT
-        ================================================= */}
-
-        <section
-          className={
-            styles.contactBanner
-          }
-        >
-
-          <div
-            className={`${styles.container} ${styles.contactBannerInner}`}
-          >
-
+        <section className={styles.contactBanner}>
+          <div className={`${styles.container} ${styles.contactBannerInner}`}>
             <div>
-
-              <strong>
-                หาสินค้าที่ต้องการไม่เจอ?
-              </strong>
-
+              <strong>หาสินค้าที่ต้องการไม่เจอ?</strong>
               <p>
                 แจ้งขนาด รุ่น หรือรายละเอียดที่ต้องการ ทีมงาน SRR AND SUPPLY
                 พร้อมช่วยค้นหาให้
               </p>
-
             </div>
 
 
-            <div
-              className={
-                styles.contactButtons
-              }
-            >
-
-              <Link href="/contact">
-                ติดต่อเรา
-              </Link>
-
-              <button
-                type="button"
-              >
-                สอบถามสินค้า
-              </button>
-
+            <div className={styles.contactButtons}>
+              <Link href="/contact">ติดต่อเรา</Link>
+              <button type="button">สอบถามสินค้า</button>
             </div>
-
           </div>
-
         </section>
-
       </main>
 
 
-      {/* =================================================
-          PRODUCT QUICK VIEW
-      ================================================= */}
-
       <ProductQuickView
-        open={
-          quickViewProduct !==
-          null
-        }
-        product={
-          quickViewProduct
-        }
-        onClose={
-          closeQuickView
-        }
-        onAddToCart={
-          addToCart
-        }
+        open={quickViewProduct !== null}
+        product={quickViewProduct}
+        onClose={closeQuickView}
+        onAddToCart={addToCart}
       />
 
-
-      {/* =================================================
-          CART DRAWER
-      ================================================= */}
 
       <CartDrawer
-        open={
-          isCartOpen
-        }
-
-        items={
-          cartItems
-        }
-
-        onClose={() =>
-          setIsCartOpen(
-            false
-          )
-        }
-
-        onIncrease={
-          increaseCartItem
-        }
-
-        onDecrease={
-          decreaseCartItem
-        }
-
-        onRemove={
-          removeCartItem
-        }
-
+        open={isCartOpen}
+        items={cartItems}
+        onClose={() => setIsCartOpen(false)}
+        onIncrease={increaseCartItem}
+        onDecrease={decreaseCartItem}
+        onRemove={removeCartItem}
         onContinueShopping={() => {
-          setIsCartOpen(
-            false
-          );
-
-          window.location.href =
-            "/products";
+          setIsCartOpen(false);
+          window.location.href = "/products";
         }}
-
         onViewCart={() => {
-          setIsCartOpen(
-            false
-          );
-
-          window.location.href =
-            "/cart";
+          setIsCartOpen(false);
+          window.location.href = "/cart";
         }}
-
         onCheckout={() => {
-          setIsCartOpen(
-            false
-          );
-
-          window.location.href =
-            "/cart";
+          setIsCartOpen(false);
+          window.location.href = "/cart";
         }}
       />
-
     </div>
   );
 }

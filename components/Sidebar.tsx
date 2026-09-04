@@ -40,132 +40,30 @@ const menuGroups: MenuGroup[] = [
     items: [
       {
         label: "สินค้า",
-        href: "/products",
+        href: "/admin/products",
+      },
+
+      {
+        label: "สร้างสินค้า",
+        href: "/admin/products/new",
       },
       {
         label: "หมวดหมู่สินค้า",
-        href: "/product-categories",
+        href: "/admin/product-categories",
       },
+      
     ],
   },
 
-  {
-    title: "สินค้าคงคลัง",
-    icon: "□",
-    items: [
-      {
-        label: "สินค้าคงคลัง",
-        href: "/inventory",
-      },
-      {
-        label: "เช็คสินค้าคงคลัง",
-        href: "/stock-count",
-      },
-      {
-        label: "เติมสินค้า",
-        href: "/stock-replenishment",
-      },
-      {
-        label: "ผู้จัดจำหน่าย",
-        href: "/suppliers",
-      },
-      {
-        label: "รายการเคลื่อนไหว",
-        href: "/stock-movements",
-      },
-      {
-        label: "รายงานสินค้าคงคลัง",
-        href: "/inventory-reports",
-      },
-    ],
-  },
+  
 
   {
-    title: "การขาย",
-    icon: "▤",
-    badge: 7,
+    title: "ตั้งค่าระบบ",
+    icon: "⚙",
     items: [
       {
-        label: "ออเดอร์",
-        href: "/orders",
-      },
-      {
-        label: "PO ลูกค้า",
-        href: "/customer-po",
-      },
-      {
-        label: "รายงานการขาย",
-        href: "/sales-reports",
-      },
-      {
-        label: "ลูกค้า",
-        href: "/customers",
-      },
-    ],
-  },
-
-  {
-    title: "จัดซื้อ",
-    icon: "☷",
-    badge: 4,
-    items: [
-      {
-        label: "PR",
-        href: "/purchase-requests",
-      },
-      {
-        label: "PO จัดซื้อ",
-        href: "/purchase-orders",
-      },
-      {
-        label: "ประวัติการจัดซื้อ",
-        href: "/purchase-history",
-      },
-    ],
-  },
-
-  {
-    title: "จัดส่ง",
-    icon: "▰",
-    badge: 18,
-    items: [
-      {
-        label: "รอจัดส่ง",
-        href: "/shipments",
-      },
-      {
-        label: "ประวัติการจัดส่ง",
-        href: "/shipment-history",
-      },
-    ],
-  },
-
-  {
-    title: "เอกสารและภาษี",
-    icon: "▥",
-    items: [
-      {
-        label: "ใบเสนอราคา",
-        href: "/quotations",
-      },
-      {
-        label: "ใบกำกับภาษี",
-        href: "/tax-invoices",
-      },
-      {
-        label: "ใบเสร็จรับเงิน",
-        href: "/receipts",
-      },
-    ],
-  },
-
-  {
-    title: "รายงาน",
-    icon: "▦",
-    items: [
-      {
-        label: "รายงานภาพรวม",
-        href: "/reports",
+        label: "FlowAccount",
+        href: "/admin/settings/flowaccount",
       },
     ],
   },

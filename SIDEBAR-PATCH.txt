@@ -1,0 +1,23 @@
+ใน components/Sidebar.tsx ให้เพิ่ม item นี้ในกลุ่ม "จัดการสินค้า":
+
+
+{
+  label: "เพิ่มสินค้า",
+  href: "/admin/products/new",
+},
+
+
+ตัวอย่าง:
+{
+  title: "จัดการสินค้า",
+  icon: "▣",
+  items: [
+    { label: "สินค้า", href: "/products" },
+    { label: "เพิ่มสินค้า", href: "/admin/products/new" },
+    { label: "หมวดหมู่สินค้า", href: "/admin/product-categories" },
+  ],
+},
+
+
+ถ้าเมนู FlowAccount อยู่ใน app/admin/settings/flowaccount ให้ href เป็น:
+/admin/settings/flowaccount

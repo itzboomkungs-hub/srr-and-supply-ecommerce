@@ -1,0 +1,338 @@
+.flowaccount-settings-page {
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 32px 38px 50px;
+  background: #f4f7fb;
+  color: #29445f;
+}
+
+.flowaccount-settings-container {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.flowaccount-settings-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.flowaccount-settings-breadcrumb {
+  margin-bottom: 8px;
+  color: #7b8fa4;
+  font-size: 12px;
+}
+
+.flowaccount-settings-breadcrumb span {
+  margin: 0 8px;
+  color: #b5c0cb;
+}
+
+.flowaccount-settings-header h1 {
+  margin: 0;
+  color: #123452;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.flowaccount-settings-header p {
+  margin: 8px 0 0;
+  color: #7d91a5;
+  font-size: 13px;
+}
+
+.flowaccount-status {
+  min-height: 38px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.flowaccount-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.flowaccount-status.connected {
+  background: #eaf8f2;
+  color: #16845e;
+}
+.flowaccount-status.connected i { background: #1ca674; }
+.flowaccount-status.error {
+  background: #fff0f1;
+  color: #cc4d58;
+}
+.flowaccount-status.error i { background: #d6505b; }
+.flowaccount-status.not_configured {
+  background: #eef2f6;
+  color: #6f8296;
+}
+.flowaccount-status.not_configured i { background: #91a0af; }
+
+.flowaccount-notice {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  font-size: 12px;
+}
+.flowaccount-notice.success {
+  border: 1px solid #ccebdd;
+  background: #effaf5;
+  color: #167853;
+}
+.flowaccount-notice.error {
+  border: 1px solid #f1c9cd;
+  background: #fff4f5;
+  color: #b84550;
+}
+
+.flowaccount-loading {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e1e9f1;
+  border-radius: 11px;
+  background: #fff;
+  color: #7d91a5;
+  font-size: 13px;
+}
+
+.flowaccount-settings-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: 16px;
+}
+
+.flowaccount-card {
+  overflow: hidden;
+  border: 1px solid #e1e9f1;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(25, 50, 75, .035);
+}
+
+.flowaccount-card-header {
+  min-height: 78px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #e8edf2;
+}
+
+.flowaccount-card-header h2 {
+  margin: 0;
+  color: #183754;
+  font-size: 17px;
+}
+
+.flowaccount-card-header p {
+  margin: 5px 0 0;
+  color: #95a3b1;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.flowaccount-provider-badge {
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: #e9f3ff;
+  color: #1677d2;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.flowaccount-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.flowaccount-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #526b82;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.flowaccount-form input,
+.flowaccount-form select {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid #dce5ed;
+  border-radius: 8px;
+  outline: 0;
+  background: #fff;
+  color: #263f58;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.flowaccount-form input:focus,
+.flowaccount-form select:focus {
+  border-color: #1677d2;
+  box-shadow: 0 0 0 2px rgba(22, 119, 210, .07);
+}
+
+.flowaccount-actions {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  border-top: 1px solid #e9eef3;
+  background: #fbfcfd;
+}
+
+.flowaccount-primary-button,
+.flowaccount-secondary-button {
+  min-height: 40px;
+  padding: 0 15px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flowaccount-primary-button {
+  border: 1px solid #1677d2;
+  background: #1677d2;
+  color: #fff;
+}
+.flowaccount-primary-button:hover:not(:disabled) { background: #1067ba; }
+.flowaccount-secondary-button {
+  border: 1px solid #d7e2ec;
+  background: #fff;
+  color: #526b82;
+}
+.flowaccount-primary-button:disabled,
+.flowaccount-secondary-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.flowaccount-sync-options {
+  padding: 14px 20px 5px;
+}
+
+.flowaccount-sync-options label {
+  min-height: 68px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf1f5;
+  cursor: pointer;
+}
+
+.flowaccount-sync-options input {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  accent-color: #1677d2;
+}
+
+.flowaccount-sync-options label > span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flowaccount-sync-options strong {
+  color: #29445f;
+  font-size: 12px;
+}
+
+.flowaccount-sync-options small {
+  color: #8a9baa;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.flowaccount-sync-meta {
+  margin: 15px 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.flowaccount-sync-meta > div {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #e5ebf1;
+  border-radius: 8px;
+  background: #f9fbfd;
+}
+
+.flowaccount-sync-meta span,
+.flowaccount-sync-meta strong {
+  display: block;
+}
+.flowaccount-sync-meta span {
+  color: #8a9bac;
+  font-size: 9px;
+}
+.flowaccount-sync-meta strong {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #38546f;
+  font-size: 10px;
+  text-overflow: ellipsis;
+}
+
+.flowaccount-last-error {
+  margin: 0 20px 15px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  background: #fff4f5;
+  color: #b84550;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.flowaccount-sync-result {
+  margin: 0 20px 15px;
+  padding: 11px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  border-radius: 8px;
+  background: #f3f8fd;
+  color: #6a8096;
+  font-size: 9px;
+}
+.flowaccount-sync-result strong {
+  color: #173f78;
+  font-size: 12px;
+}
+
+.flowaccount-sync-button { width: 100%; }
+
+@media (max-width: 1000px) {
+  .flowaccount-settings-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+  .flowaccount-settings-page { padding: 22px 15px 35px; }
+  .flowaccount-settings-header { align-items: flex-start; flex-direction: column; }
+  .flowaccount-settings-header h1 { font-size: 26px; }
+  .flowaccount-sync-meta { grid-template-columns: 1fr; }
+  .flowaccount-actions { flex-direction: column; }
+  .flowaccount-primary-button,
+  .flowaccount-secondary-button { width: 100%; }
+}

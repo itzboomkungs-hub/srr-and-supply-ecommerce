@@ -106,6 +106,77 @@
 }
 
 
+
+
+/* =========================================================
+   CART MODE / SQL STATUS
+========================================================= */
+
+.cartMode {
+  width: fit-content;
+  max-width: 100%;
+
+  margin-top: 12px;
+  padding: 7px 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  border: 1px solid #dfe7ef;
+  border-radius: 5px;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.cartModeMember {
+  border-color: #cce7d6;
+  background: #f3fbf6;
+  color: #287345;
+}
+
+.cartModeGuest {
+  border-color: #dce6f0;
+  background: #f7faff;
+  color: #60778f;
+}
+
+.cartModeDot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.cartMode strong {
+  font-weight: 800;
+}
+
+.cartMode small {
+  margin-left: 4px;
+  color: #7c8fa1;
+  font-size: 9px;
+}
+
+.syncError {
+  width: fit-content;
+  max-width: 100%;
+
+  margin-top: 8px;
+  padding: 7px 10px;
+
+  border: 1px solid #ffd5d5;
+  border-radius: 5px;
+
+  background: #fff7f7;
+  color: #b44747;
+
+  font-size: 10px;
+}
+
+
 /* =========================================================
    CART LAYOUT
 ========================================================= */
@@ -327,14 +398,14 @@
 ========================================================= */
 
 .quantity {
-  width: 98px;
+  width: 108px;
   height: 34px;
 
   display: grid;
 
   grid-template-columns:
     31px
-    36px
+    46px
     31px;
 
   border:
@@ -368,20 +439,34 @@
   cursor: not-allowed;
 }
 
-.quantity span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.quantity input {
+  width: 46px;
+  min-width: 46px;
+  height: 100%;
 
-  border-left:
-    1px solid #e1e6eb;
+  padding: 0 4px;
 
-  border-right:
-    1px solid #e1e6eb;
+  border-top: 0;
+  border-bottom: 0;
+  border-left: 1px solid #e1e6eb;
+  border-right: 1px solid #e1e6eb;
 
+  outline: none;
+
+  background: #ffffff;
+  color: #263b53;
+
+  font-family: inherit;
   font-size: 11px;
-
   font-weight: 700;
+  text-align: center;
+
+  box-sizing: border-box;
+}
+
+.quantity input:focus {
+  background: #f8fbff;
+  box-shadow: inset 0 0 0 1px #8fc2f2;
 }
 
 

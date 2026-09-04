@@ -18,6 +18,9 @@ import type {
 const CART_KEY =
   "srr-demo-cart";
 
+const CART_OWNER_KEY =
+  "srr-cart-owner";
+
 /* =====================================================
    TYPES
 ===================================================== */
@@ -39,6 +42,134 @@ type RegisterFormState = {
 type AuthTab =
   | "login"
   | "register";
+
+
+/* =====================================================
+   CART AFTER AUTH
+
+   เป้าหมาย:
+   - Guest มีของในตะกร้า -> merge เข้า Cart ของสมาชิกทันที
+   - ไม่มี Guest cart -> โหลด Cart เดิมของสมาชิกจาก MySQL
+   - เขียนผลกลับ localStorage เพื่อ Header แสดงจำนวนถูกทันที
+===================================================== */
+
+type CartApiResponse = {
+  ok: boolean;
+  items?: CartItem[];
+  message?: string;
+};
+
+function readLocalCartSnapshot() {
+  try {
+    const raw =
+      window.localStorage.getItem(
+        CART_KEY
+      );
+
+    if (!raw) {
+      return [] as CartItem[];
+    }
+
+    const parsed =
+      JSON.parse(raw);
+
+    return Array.isArray(parsed)
+      ? (parsed as CartItem[])
+      : [];
+  } catch {
+    return [] as CartItem[];
+  }
+}
+
+function writeMemberCartSnapshot(
+  items: CartItem[],
+  userId: string
+) {
+  window.localStorage.setItem(
+    CART_KEY,
+    JSON.stringify(items)
+  );
+
+  window.localStorage.setItem(
+    CART_OWNER_KEY,
+    userId
+  );
+
+  window.dispatchEvent(
+    new Event(
+      "srr-cart-updated"
+    )
+  );
+}
+
+async function syncCartAfterAuth(
+  userId: string
+) {
+  const localItems =
+    readLocalCartSnapshot();
+
+  const localOwner =
+    window.localStorage.getItem(
+      CART_OWNER_KEY
+    );
+
+  let response: Response;
+
+  if (
+    localItems.length > 0 &&
+    (!localOwner ||
+      localOwner === "guest")
+  ) {
+    response = await fetch(
+      "/api/cart/sync",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          mode: "merge",
+          items: localItems,
+        }),
+      }
+    );
+  } else {
+    response = await fetch(
+      "/api/cart",
+      {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      }
+    );
+  }
+
+  const result =
+    (await response.json()) as
+      CartApiResponse;
+
+  if (
+    !response.ok ||
+    !result.ok
+  ) {
+    throw new Error(
+      result.message ||
+        "ไม่สามารถซิงก์ตะกร้าหลังเข้าสู่ระบบได้"
+    );
+  }
+
+  const nextItems =
+    result.items || [];
+
+  writeMemberCartSnapshot(
+    nextItems,
+    userId
+  );
+
+  return nextItems;
+}
 
 /* =====================================================
    PAGE
@@ -129,6 +260,11 @@ export default function LoginPage() {
       confirmPassword:
         "",
     });
+
+  const [
+    authSubmitting,
+    setAuthSubmitting,
+  ] = useState(false);
 
   /* =====================================================
      CART
@@ -338,10 +474,10 @@ export default function LoginPage() {
   }
 
   /* =====================================================
-     LOGIN SUBMIT
+     LOGIN SUBMIT - MYSQL
   ===================================================== */
 
-  function handleLoginSubmit(
+  async function handleLoginSubmit(
     event: FormEvent<
       HTMLFormElement
     >
@@ -354,7 +490,6 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกอีเมลหรือเบอร์โทรศัพท์"
       );
-
       return;
     }
 
@@ -364,25 +499,93 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกรหัสผ่าน"
       );
-
       return;
     }
 
-    console.log(
-      "LOGIN DEMO:",
-      loginForm
-    );
+    try {
+      setAuthSubmitting(true);
 
-    alert(
-      "ทดสอบเข้าสู่ระบบเรียบร้อย (ยังไม่เชื่อม SQL)"
-    );
+      const response =
+        await fetch(
+          "/api/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              identity:
+                loginForm.identity,
+              password:
+                loginForm.password,
+              remember:
+                loginForm.remember,
+            }),
+          }
+        );
+
+      const result =
+        await response.json();
+
+      if (
+        !response.ok ||
+        !result.ok
+      ) {
+        alert(
+          result.message ||
+            "เข้าสู่ระบบไม่สำเร็จ"
+        );
+        return;
+      }
+
+      try {
+        const syncedItems =
+          await syncCartAfterAuth(
+            result.user.id
+          );
+
+        setCartItems(
+          syncedItems
+        );
+      } catch (cartError) {
+        console.error(
+          "Cart sync after login error:",
+          cartError
+        );
+      }
+
+      window.dispatchEvent(
+        new Event(
+          "srr-auth-updated"
+        )
+      );
+
+      alert(
+        `เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ ${result.user.fullName}`
+      );
+
+      window.location.href =
+        "/";
+    } catch (error) {
+      console.error(
+        "Login request error:",
+        error
+      );
+
+      alert(
+        "เชื่อมต่อระบบไม่ได้ กรุณาตรวจสอบว่า Laragon / MySQL และ Next.js เปิดอยู่"
+      );
+    } finally {
+      setAuthSubmitting(false);
+    }
   }
 
   /* =====================================================
-     REGISTER SUBMIT
+     REGISTER SUBMIT - MYSQL
   ===================================================== */
 
-  function handleRegisterSubmit(
+  async function handleRegisterSubmit(
     event: FormEvent<
       HTMLFormElement
     >
@@ -395,7 +598,6 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกชื่อ-นามสกุล"
       );
-
       return;
     }
 
@@ -405,7 +607,6 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกอีเมล"
       );
-
       return;
     }
 
@@ -415,17 +616,16 @@ export default function LoginPage() {
       alert(
         "กรุณากรอกเบอร์โทรศัพท์"
       );
-
       return;
     }
 
     if (
-      !registerForm.password.trim()
+      registerForm.password.length <
+      8
     ) {
       alert(
-        "กรุณาตั้งรหัสผ่าน"
+        "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
       );
-
       return;
     }
 
@@ -436,18 +636,81 @@ export default function LoginPage() {
       alert(
         "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน"
       );
-
       return;
     }
 
-    console.log(
-      "REGISTER DEMO:",
-      registerForm
-    );
+    try {
+      setAuthSubmitting(true);
 
-    alert(
-      "ทดสอบสมัครสมาชิกเรียบร้อย (ยังไม่เชื่อม SQL)"
-    );
+      const response =
+        await fetch(
+          "/api/auth/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify(
+              registerForm
+            ),
+          }
+        );
+
+      const result =
+        await response.json();
+
+      if (
+        !response.ok ||
+        !result.ok
+      ) {
+        alert(
+          result.message ||
+            "สมัครสมาชิกไม่สำเร็จ"
+        );
+        return;
+      }
+
+      try {
+        const syncedItems =
+          await syncCartAfterAuth(
+            result.user.id
+          );
+
+        setCartItems(
+          syncedItems
+        );
+      } catch (cartError) {
+        console.error(
+          "Cart sync after register error:",
+          cartError
+        );
+      }
+
+      window.dispatchEvent(
+        new Event(
+          "srr-auth-updated"
+        )
+      );
+
+      alert(
+        `สมัครสมาชิกสำเร็จ ยินดีต้อนรับ ${result.user.fullName}`
+      );
+
+      window.location.href =
+        "/";
+    } catch (error) {
+      console.error(
+        "Register request error:",
+        error
+      );
+
+      alert(
+        "เชื่อมต่อระบบไม่ได้ กรุณาตรวจสอบว่า Laragon / MySQL และ Next.js เปิดอยู่"
+      );
+    } finally {
+      setAuthSubmitting(false);
+    }
   }
 
   /* =====================================================
@@ -858,8 +1121,13 @@ export default function LoginPage() {
                       className={
                         styles.primaryButton
                       }
+                      disabled={
+                        authSubmitting
+                      }
                     >
-                      เข้าสู่ระบบ
+                      {authSubmitting
+                        ? "กำลังเข้าสู่ระบบ..."
+                        : "เข้าสู่ระบบ"}
                     </button>
 
                     <div
@@ -1090,8 +1358,13 @@ export default function LoginPage() {
                       className={
                         styles.primaryButton
                       }
+                      disabled={
+                        authSubmitting
+                      }
                     >
-                      สมัครสมาชิก
+                      {authSubmitting
+                        ? "กำลังสมัครสมาชิก..."
+                        : "สมัครสมาชิก"}
                     </button>
 
                     <div
